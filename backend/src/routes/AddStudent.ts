@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import StudentModal from "../models/StudentModel";
 import cfhandleinfo from "../helpers/cfhandleinfo";
 import authmiddleware from "../middelware/authmiddleware";
+import SyncStudentcontest from "../helpers/FetchContestdetail";
 
 const Addstudentroute = express.Router();
 
@@ -24,7 +25,7 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
         });
     }else {
         try {
-            await StudentModal.create({
+            const newstudent = await StudentModal.create({
                 name,
                 email,
                 phnumber,
@@ -33,6 +34,13 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
                 CurrRating,
                 userid,
             })
+
+            if(newstudent.cfhandle) {
+                await SyncStudentcontest(newstudent.id, newstudent.cfhandle);
+            }
+
+
+
 
             res.status(200).json({
                 message : "Student detailed added succesfully"

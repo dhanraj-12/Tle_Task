@@ -42,6 +42,8 @@ const StudentSchema = new mongoose_1.Schema({
     MaxRating: Number,
     CurrRating: Number,
     userid: { type: mongoose_1.default.Types.ObjectId, require: true }
+}, {
+    timestamps: true,
 });
 const StudentModal = mongoose_1.default.model("Student", StudentSchema);
 exports.default = StudentModal;

@@ -7,6 +7,10 @@ import Signuprouter from "./routes/Signuproute";
 import Editroute from "./routes/Edit";
 import deleteroute from "./routes/delete";
 import Studentlistrouter from "./routes/Studentlist";
+import Exportrouter from "./routes/export";
+import SyncContestrouter from "./routes/SyncContest";
+import Startsynccontest from "./cronjobs/cronsynccontes";
+
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -22,7 +26,9 @@ const mongoconnect = async () => {
         console.error('Error connecting to MongoDB:', err)
     }
 }
+
 mongoconnect();
+Startsynccontest();
 
 
 app.use("/api",Addstudentroute);
@@ -31,5 +37,7 @@ app.use("/api", Signuprouter);
 app.use("/api",Editroute);
 app.use("/api",deleteroute);
 app.use("/api",Studentlistrouter);
+app.use("/api",Exportrouter);
+app.use("/api",SyncContestrouter);
 
 app.listen(3000,()=>console.log("App is listnign on 3000"));

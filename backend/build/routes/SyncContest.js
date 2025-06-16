@@ -14,30 +14,36 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
-const authmiddleware_1 = __importDefault(require("../middelware/authmiddleware"));
+const StudentcontestModel_1 = __importDefault(require("../models/StudentcontestModel"));
 const FetchContestdetail_1 = __importDefault(require("../helpers/FetchContestdetail"));
-const Editroute = express_1.default.Router();
-const Edithandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userid = req.userId;
-    const update = req.body;
+const SyncContestrouter = express_1.default.Router();
+const SyncContestrouterhandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const { id } = req.params;
+    const range = parseInt(req.query.range) || 30;
+    const since = Math.floor(Date.now() / 1000) - range * 86400;
     try {
-        const updatedstudent = yield StudentModel_1.default.findOneAndUpdate({ userid }, update, { new: true, runValidators: true });
-        if (!updatedstudent) {
-            res.status(404).json({ error: "Student not found" });
+        const student = yield StudentModel_1.default.findById(id);
+        if (!student || !student.cfhandle) {
+            res.status(404).json({
+                error: "Student or Codeforces handles not found",
+            });
             return;
         }
-        if (updatedstudent.cfhandle) {
-            yield (0, FetchContestdetail_1.default)(updatedstudent.id, updatedstudent.cfhandle);
-        }
-        res.status(200).json({
-            message: "Information updated successfully",
-            student: updatedstudent
+        yield (0, FetchContestdetail_1.default)(id, student.cfhandle);
+        const contest = yield StudentcontestModel_1.default.find({
+            StudentId: id,
+            ratingUpdateTimeSeconds: { $gte: since },
+        }).sort({
+            ratingUpdateTimeSeconds: 1
         });
+        res.json({ contest });
     }
     catch (e) {
-        console.error("Error in updating information", e);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error(e);
+        res.status(500).json({
+            error: "Internal Serval error"
+        });
     }
 });
-Editroute.patch("/edit", authmiddleware_1.default, Edithandler);
-exports.default = Editroute;
+SyncContestrouter.get("/:id/contests", SyncContestrouterhandler);
+exports.default = SyncContestrouter;

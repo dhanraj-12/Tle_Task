@@ -13,31 +13,30 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+const json2csv_1 = require("json2csv");
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
-const authmiddleware_1 = __importDefault(require("../middelware/authmiddleware"));
-const FetchContestdetail_1 = __importDefault(require("../helpers/FetchContestdetail"));
-const Editroute = express_1.default.Router();
-const Edithandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userid = req.userId;
-    const update = req.body;
+const Exportrouter = express_1.default.Router();
+const Exportrouterhanler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const updatedstudent = yield StudentModel_1.default.findOneAndUpdate({ userid }, update, { new: true, runValidators: true });
-        if (!updatedstudent) {
-            res.status(404).json({ error: "Student not found" });
+        const students = yield StudentModel_1.default.find().lean();
+        if (!students) {
+            res.status(404).json({
+                error: "No Student Found",
+            });
             return;
         }
-        if (updatedstudent.cfhandle) {
-            yield (0, FetchContestdetail_1.default)(updatedstudent.id, updatedstudent.cfhandle);
-        }
-        res.status(200).json({
-            message: "Information updated successfully",
-            student: updatedstudent
-        });
+        const fields = ["name", "email", "phnumber", "cfhandle"];
+        const json2csv = new json2csv_1.Parser({ fields });
+        const csv = json2csv.parse(students);
+        res.header("Content-Type", "text/csv");
+        res.attachment("students.csv");
+        res.send(csv);
+        return;
     }
-    catch (e) {
-        console.error("Error in updating information", e);
+    catch (error) {
+        console.error("Error exporting CSV:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-Editroute.patch("/edit", authmiddleware_1.default, Edithandler);
-exports.default = Editroute;
+Exportrouter.get("/export", Exportrouterhanler);
+exports.default = Exportrouter;
