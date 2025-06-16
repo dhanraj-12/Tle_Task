@@ -6,7 +6,8 @@ const StudentSchema = new Schema({
     phnumber : String,
     cfhandle : String,
     MaxRating : Number,
-    CurrRating : Number
+    CurrRating : Number,
+    userid : {type : mongoose.Types.ObjectId, require: true}
 })
 
 const StudentModal = mongoose.model("Student",StudentSchema);

@@ -16,6 +16,9 @@ const express_1 = __importDefault(require("express"));
 const mongoose_1 = __importDefault(require("mongoose"));
 const dotenv_1 = __importDefault(require("dotenv"));
 const AddStudent_1 = __importDefault(require("./routes/AddStudent"));
+const SIgnin_1 = __importDefault(require("./routes/SIgnin"));
+const Signuproute_1 = __importDefault(require("./routes/Signuproute"));
+const Edit_1 = __importDefault(require("./routes/Edit"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 dotenv_1.default.config();
@@ -31,4 +34,7 @@ const mongoconnect = () => __awaiter(void 0, void 0, void 0, function* () {
 });
 mongoconnect();
 app.use("/api", AddStudent_1.default);
+app.use("/api", SIgnin_1.default);
+app.use("/api", Signuproute_1.default);
+app.use("/api", Edit_1.default);
 app.listen(3000, () => console.log("App is listnign on 3000"));

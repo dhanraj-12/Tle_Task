@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import Addstudentroute from "./routes/AddStudent";
 import Siginrouter from "./routes/SIgnin";
 import Signuprouter from "./routes/Signuproute";
+import Editroute from "./routes/Edit";
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -24,7 +25,8 @@ mongoconnect();
 
 
 app.use("/api",Addstudentroute)
-app.use("/sigin",Siginrouter);
-app.use("/signup", Signuprouter)
+app.use("/api",Siginrouter);
+app.use("/api", Signuprouter)
+app.use("/api",Editroute)
 
 app.listen(3000,()=>console.log("App is listnign on 3000"));

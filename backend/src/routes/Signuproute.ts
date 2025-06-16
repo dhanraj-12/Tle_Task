@@ -25,7 +25,7 @@ const Signinhandler = async (req : Request, res : Response) => {
             })
         }
 
-        const hashedpassword = bcrypt.hash(password,10);
+        const hashedpassword = (await bcrypt.hash(password,10)).toString();
 
         await UserModel.create({
             email,

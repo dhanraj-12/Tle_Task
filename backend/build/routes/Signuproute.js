@@ -16,7 +16,7 @@ const express_1 = __importDefault(require("express"));
 const UserModel_1 = __importDefault(require("../models/UserModel"));
 const zod_1 = require("zod");
 const bcrypt_1 = __importDefault(require("bcrypt"));
-const signrouter = express_1.default.Router();
+const Signuprouter = express_1.default.Router();
 const signuschema = zod_1.z.object({
     email: zod_1.z.string().email(),
     password: zod_1.z.string().min(6, "Password must be atleast 6 charachter long")
@@ -31,7 +31,7 @@ const Signinhandler = (req, res) => __awaiter(void 0, void 0, void 0, function* 
                 error: "User already exist"
             });
         }
-        const hashedpassword = bcrypt_1.default.hash(password, 10);
+        const hashedpassword = (yield bcrypt_1.default.hash(password, 10)).toString();
         yield UserModel_1.default.create({
             email,
             password: hashedpassword
@@ -52,5 +52,5 @@ const Signinhandler = (req, res) => __awaiter(void 0, void 0, void 0, function* 
         });
     }
 });
-signrouter.post("/signup", Signinhandler);
-exports.default = signrouter;
+Signuprouter.post("/signup", Signinhandler);
+exports.default = Signuprouter;

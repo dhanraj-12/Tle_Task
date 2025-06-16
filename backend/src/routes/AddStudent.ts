@@ -2,10 +2,12 @@ import express from "express"
 import { Request, Response } from "express";
 import StudentModal from "../models/StudentModel";
 import cfhandleinfo from "../helpers/cfhandleinfo";
+import authmiddleware from "../middelware/authmiddleware";
 
 const Addstudentroute = express.Router();
 
 const Addstudentroutehandler = async (req : Request, res : Response) => {
+    const userid = req.userId;
     const name = req.body.name;
     const email = req.body.email;
     const phnumber = req.body.phnumber;
@@ -28,7 +30,8 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
                 phnumber,
                 cfhandle,
                 MaxRating,
-                CurrRating
+                CurrRating,
+                userid,
             })
 
             res.status(200).json({
@@ -42,5 +45,5 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
     
 }
 
-Addstudentroute.post("/add", Addstudentroutehandler);
+Addstudentroute.post("/add",authmiddleware, Addstudentroutehandler);
 export default Addstudentroute

@@ -19,7 +19,7 @@ const bcrypt_1 = __importDefault(require("bcrypt"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const dotenv_1 = __importDefault(require("dotenv"));
 dotenv_1.default.config();
-const signrouter = express_1.default.Router();
+const Siginrouter = express_1.default.Router();
 const signinSchema = zod_1.z.object({
     email: zod_1.z.string().email(),
     password: zod_1.z.string().min(6, "Password must be at least 6 characters"),
@@ -51,5 +51,5 @@ const SigninHandler = (req, res) => __awaiter(void 0, void 0, void 0, function* 
     }
 });
 // Attach POST route
-signrouter.post("/signin", SigninHandler);
-exports.default = signrouter;
+Siginrouter.post("/signin", SigninHandler);
+exports.default = Siginrouter;

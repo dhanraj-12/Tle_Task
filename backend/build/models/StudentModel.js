@@ -40,7 +40,8 @@ const StudentSchema = new mongoose_1.Schema({
     phnumber: String,
     cfhandle: String,
     MaxRating: Number,
-    CurrRating: Number
+    CurrRating: Number,
+    userid: { type: mongoose_1.default.Types.ObjectId, require: true }
 });
 const StudentModal = mongoose_1.default.model("Student", StudentSchema);
 exports.default = StudentModal;

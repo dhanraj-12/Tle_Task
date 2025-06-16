@@ -15,8 +15,10 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
 const cfhandleinfo_1 = __importDefault(require("../helpers/cfhandleinfo"));
+const authmiddleware_1 = __importDefault(require("../middelware/authmiddleware"));
 const Addstudentroute = express_1.default.Router();
 const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const userid = req.userId;
     const name = req.body.name;
     const email = req.body.email;
     const phnumber = req.body.phnumber;
@@ -37,7 +39,8 @@ const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, f
                 phnumber,
                 cfhandle,
                 MaxRating,
-                CurrRating
+                CurrRating,
+                userid,
             });
             res.status(200).json({
                 message: "Student detailed added succesfully"
@@ -48,5 +51,5 @@ const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, f
         }
     }
 });
-Addstudentroute.post("/add", Addstudentroutehandler);
+Addstudentroute.post("/add", authmiddleware_1.default, Addstudentroutehandler);
 exports.default = Addstudentroute;
