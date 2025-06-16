@@ -17,9 +17,9 @@ const StudentModel_1 = __importDefault(require("../models/StudentModel"));
 const cfhandleinfo_1 = __importDefault(require("../helpers/cfhandleinfo"));
 const Addstudentroute = express_1.default.Router();
 const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const name = req.body.studentname;
+    const name = req.body.name;
     const email = req.body.email;
-    const phnumber = req.body.phonenumber;
+    const phnumber = req.body.phnumber;
     const cfhandle = req.body.cfhandle;
     const cfinfo = yield (0, cfhandleinfo_1.default)(cfhandle);
     const MaxRating = cfinfo.maxRating;

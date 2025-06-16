@@ -6,9 +6,9 @@ import cfhandleinfo from "../helpers/cfhandleinfo";
 const Addstudentroute = express.Router();
 
 const Addstudentroutehandler = async (req : Request, res : Response) => {
-    const name = req.body.studentname;
+    const name = req.body.name;
     const email = req.body.email;
-    const phnumber = req.body.phonenumber;
+    const phnumber = req.body.phnumber;
     const cfhandle = req.body.cfhandle;
     const cfinfo = await cfhandleinfo(cfhandle);
 
