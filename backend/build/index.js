@@ -23,6 +23,7 @@ const delete_1 = __importDefault(require("./routes/delete"));
 const Studentlist_1 = __importDefault(require("./routes/Studentlist"));
 const export_1 = __importDefault(require("./routes/export"));
 const SyncContest_1 = __importDefault(require("./routes/SyncContest"));
+const cronsynccontes_1 = __importDefault(require("./cronjobs/cronsynccontes"));
 const app = (0, express_1.default)();
 app.use(express_1.default.json());
 dotenv_1.default.config();
@@ -37,6 +38,7 @@ const mongoconnect = () => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 mongoconnect();
+(0, cronsynccontes_1.default)();
 app.use("/api", AddStudent_1.default);
 app.use("/api", SIgnin_1.default);
 app.use("/api", Signuproute_1.default);

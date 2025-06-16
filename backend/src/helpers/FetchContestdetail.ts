@@ -2,6 +2,7 @@ import { string } from "zod";
 import { cfApiConfig } from "../cfapi";
 import StudentContest from "../models/StudentcontestModel";
 import axios from "axios";
+import getunsolved from "./Unsolvedque";
 
 const SyncStudentcontest = async (StudentId:string, handle:string) => {
     try {
@@ -15,7 +16,10 @@ const SyncStudentcontest = async (StudentId:string, handle:string) => {
         const contest = data.result;
         await StudentContest.deleteMany({StudentId});
 
-        const entries = contest.map((c:any)=>({
+        const entries = [];
+        for(const c of contest) {
+            const unsolved = await getunsolved(handle,c.contestId);
+            entries.push({
             StudentId,
             handle,
             contestId: c.contestId,
@@ -24,9 +28,10 @@ const SyncStudentcontest = async (StudentId:string, handle:string) => {
             oldRating: c.oldRating,
             newRating: c.newRating,
             ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
-            unsolvedCount: -1
-        }))
-
+            unsolvedCount: unsolved
+            })
+        }
+     
 
         await StudentContest.insertMany(entries);
         console.log(" Synced ${entries.length} contests for ${handle}");

@@ -10,7 +10,7 @@ interface IStudentContest extends Document {
     oldrating: number,
     newrating: number,
     ratingUpdateTimeSeconds: number,
-    unsolvedCount: number
+    unsolvedCount: number,
 }
 
 

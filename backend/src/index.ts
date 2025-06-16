@@ -33,7 +33,7 @@ Startsynccontest();
 
 app.use("/api",Addstudentroute);
 app.use("/api",Siginrouter);
-app.use("/api", Signuprouter);
+app.use("/api",Signuprouter);
 app.use("/api",Editroute);
 app.use("/api",deleteroute);
 app.use("/api",Studentlistrouter);

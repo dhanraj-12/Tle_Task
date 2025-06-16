@@ -15,6 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const cfapi_1 = require("../cfapi");
 const StudentcontestModel_1 = __importDefault(require("../models/StudentcontestModel"));
 const axios_1 = __importDefault(require("axios"));
+const Unsolvedque_1 = __importDefault(require("./Unsolvedque"));
 const SyncStudentcontest = (StudentId, handle) => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const url = `${cfapi_1.cfApiConfig.baseUrl}${cfapi_1.cfApiConfig.endpoints.userRating(handle)}`;
@@ -24,17 +25,21 @@ const SyncStudentcontest = (StudentId, handle) => __awaiter(void 0, void 0, void
         }
         const contest = data.result;
         yield StudentcontestModel_1.default.deleteMany({ StudentId });
-        const entries = contest.map((c) => ({
-            StudentId,
-            handle,
-            contestId: c.contestId,
-            contestName: c.contestName,
-            rank: c.rank,
-            oldRating: c.oldRating,
-            newRating: c.newRating,
-            ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
-            unsolvedCount: -1
-        }));
+        const entries = [];
+        for (const c of contest) {
+            const unsolved = yield (0, Unsolvedque_1.default)(handle, c.contestId);
+            entries.push({
+                StudentId,
+                handle,
+                contestId: c.contestId,
+                contestName: c.contestName,
+                rank: c.rank,
+                oldRating: c.oldRating,
+                newRating: c.newRating,
+                ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
+                unsolvedCount: unsolved
+            });
+        }
         yield StudentcontestModel_1.default.insertMany(entries);
         console.log(" Synced ${entries.length} contests for ${handle}");
     }
