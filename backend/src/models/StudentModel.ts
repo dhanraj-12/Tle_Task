@@ -8,7 +8,11 @@ const StudentSchema = new Schema({
     MaxRating : Number,
     CurrRating : Number,
     userid : {type : mongoose.Types.ObjectId, require: true}
-})
+},
+{
+    timestamps: true,
+}
+)
 
 const StudentModal = mongoose.model("Student",StudentSchema);
 export default StudentModal;

@@ -6,6 +6,7 @@ import Siginrouter from "./routes/SIgnin";
 import Signuprouter from "./routes/Signuproute";
 import Editroute from "./routes/Edit";
 import deleteroute from "./routes/delete";
+import Studentlistrouter from "./routes/Studentlist";
 const app = express();
 app.use(express.json());
 dotenv.config();
@@ -28,6 +29,7 @@ app.use("/api",Addstudentroute);
 app.use("/api",Siginrouter);
 app.use("/api", Signuprouter);
 app.use("/api",Editroute);
-app.use("/api",deleteroute)
+app.use("/api",deleteroute);
+app.use("/api",Studentlistrouter);
 
 app.listen(3000,()=>console.log("App is listnign on 3000"));
