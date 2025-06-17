@@ -17,6 +17,7 @@ const StudentModel_1 = __importDefault(require("../models/StudentModel"));
 const cfhandleinfo_1 = __importDefault(require("../helpers/cfhandleinfo"));
 const authmiddleware_1 = __importDefault(require("../middelware/authmiddleware"));
 const FetchContestdetail_1 = __importDefault(require("../helpers/FetchContestdetail"));
+const Questionstat_1 = __importDefault(require("../helpers/Questionstat"));
 const Addstudentroute = express_1.default.Router();
 const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const userid = req.userId;
@@ -45,6 +46,9 @@ const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, f
             });
             if (newstudent.cfhandle) {
                 yield (0, FetchContestdetail_1.default)(newstudent.id, newstudent.cfhandle);
+            }
+            if (newstudent.cfhandle) {
+                yield (0, Questionstat_1.default)(newstudent.cfhandle, newstudent.id);
             }
             res.status(200).json({
                 message: "Student detailed added succesfully"

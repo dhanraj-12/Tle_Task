@@ -23,25 +23,54 @@ const SyncStudentcontest = (StudentId, handle) => __awaiter(void 0, void 0, void
         if (data.status !== "OK") {
             throw new Error(data.comment);
         }
-        const contest = data.result;
-        yield StudentcontestModel_1.default.deleteMany({ StudentId });
-        const entries = [];
-        for (const c of contest) {
+        const contests = data.result;
+        // Fetch all contests already stored
+        const existing = yield StudentcontestModel_1.default.find({ StudentId });
+        const existingMap = new Map(existing.map(c => [c.contestId, c]));
+        const newEntries = [];
+        const updatePromises = [];
+        for (const c of contests) {
+            const existingEntry = existingMap.get(c.contestId);
             const unsolved = yield (0, Unsolvedque_1.default)(handle, c.contestId);
-            entries.push({
-                StudentId,
-                handle,
-                contestId: c.contestId,
-                contestName: c.contestName,
-                rank: c.rank,
-                oldRating: c.oldRating,
-                newRating: c.newRating,
-                ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
-                unsolvedCount: unsolved
-            });
+            if (!existingEntry) {
+                // Not in DB, insert new
+                newEntries.push({
+                    StudentId,
+                    handle,
+                    contestId: c.contestId,
+                    contestName: c.contestName,
+                    rank: c.rank,
+                    oldRating: c.oldRating,
+                    newRating: c.newRating,
+                    ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
+                    unsolvedCount: unsolved
+                });
+            }
+            else {
+                if (existingEntry.rank !== c.rank ||
+                    existingEntry.oldRating !== c.oldRating ||
+                    existingEntry.newRating !== c.newRating ||
+                    existingEntry.ratingUpdateTimeSeconds !== c.ratingUpdateTimeSeconds ||
+                    existingEntry.unsolvedCount !== unsolved) {
+                    updatePromises.push(StudentcontestModel_1.default.updateOne({ _id: existingEntry._id }, {
+                        $set: {
+                            rank: c.rank,
+                            oldRating: c.oldRating,
+                            newRating: c.newRating,
+                            ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
+                            unsolvedCount: unsolved
+                        }
+                    }));
+                }
+            }
         }
-        yield StudentcontestModel_1.default.insertMany(entries);
-        console.log(" Synced ${entries.length} contests for ${handle}");
+        if (newEntries.length > 0) {
+            yield StudentcontestModel_1.default.insertMany(newEntries);
+        }
+        if (updatePromises.length > 0) {
+            yield Promise.all(updatePromises);
+        }
+        console.log(`Synced ${newEntries.length} new and ${updatePromises.length} updated contests for ${handle}`);
     }
     catch (e) {
         console.error(`Error in syncing contest for ${handle}:`, e);

@@ -3,7 +3,9 @@ export const cfApiConfig = {
     endpoints: {
       userInfo: (handle: string) => `/user.info?handles=${handle}`,
       userRating :(handle: string) => `/user.rating?handle=${handle}`,
-      contestStanding : "/contest.standings?"
+      contestStanding : "/contest.standings?",
+      userStatus: "/user.status?"
+    
     },
   };
   

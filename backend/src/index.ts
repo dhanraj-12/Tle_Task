@@ -9,7 +9,9 @@ import deleteroute from "./routes/delete";
 import Studentlistrouter from "./routes/Studentlist";
 import Exportrouter from "./routes/export";
 import SyncContestrouter from "./routes/SyncContest";
-import Startsynccontest from "./cronjobs/cronsynccontes";
+import Startsynccontest, { buildCronExpression } from "./cronjobs/cronsynccontes";
+import Startquestionsync from "./cronjobs/cronsyncquestion";
+import setcronschedulerouter from "./routes/SetCronSchedule";
 
 const app = express();
 app.use(express.json());
@@ -28,7 +30,11 @@ const mongoconnect = async () => {
 }
 
 mongoconnect();
-Startsynccontest();
+const defaultCron = buildCronExpression(2, 0, "daily");
+Startsynccontest(defaultCron);
+Startquestionsync(defaultCron);
+
+
 
 
 app.use("/api",Addstudentroute);
@@ -39,5 +45,7 @@ app.use("/api",deleteroute);
 app.use("/api",Studentlistrouter);
 app.use("/api",Exportrouter);
 app.use("/api",SyncContestrouter);
+app.use("/api",setcronschedulerouter);
+
 
 app.listen(3000,()=>console.log("App is listnign on 3000"));

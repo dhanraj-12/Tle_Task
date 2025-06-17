@@ -1,4 +1,5 @@
 import mongoose, { Schema } from "mongoose";  
+import { number } from "zod";
 
 const StudentSchema = new Schema({
     name : String,
@@ -7,7 +8,28 @@ const StudentSchema = new Schema({
     cfhandle : String,
     MaxRating : Number,
     CurrRating : Number,
-    userid : {type : mongoose.Types.ObjectId, require: true}
+    userid : {type : mongoose.Types.ObjectId, require: true},
+    totalsolvedprb : {
+        type: Number,
+        default : 0
+    },
+
+    solvedcountbyrating: {
+        type: Object,
+        default: {}
+    },
+    
+    maxratedsolved : {
+        type: Object,
+        default: {
+            rating : number,
+            contestId: String,
+            index: String,
+            name: String
+        }
+        
+    }
+
 },
 {
     timestamps: true,

@@ -34,6 +34,7 @@ var __importStar = (this && this.__importStar) || (function () {
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
 const mongoose_1 = __importStar(require("mongoose"));
+const zod_1 = require("zod");
 const StudentSchema = new mongoose_1.Schema({
     name: String,
     email: { type: String, required: true, unique: true },
@@ -41,7 +42,24 @@ const StudentSchema = new mongoose_1.Schema({
     cfhandle: String,
     MaxRating: Number,
     CurrRating: Number,
-    userid: { type: mongoose_1.default.Types.ObjectId, require: true }
+    userid: { type: mongoose_1.default.Types.ObjectId, require: true },
+    totalsolvedprb: {
+        type: Number,
+        default: 0
+    },
+    solvedcountbyrating: {
+        type: Object,
+        default: {}
+    },
+    maxratedsolved: {
+        type: Object,
+        default: {
+            rating: zod_1.number,
+            contestId: String,
+            index: String,
+            name: String
+        }
+    }
 }, {
     timestamps: true,
 });

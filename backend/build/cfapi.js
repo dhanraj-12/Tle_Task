@@ -6,6 +6,7 @@ exports.cfApiConfig = {
     endpoints: {
         userInfo: (handle) => `/user.info?handles=${handle}`,
         userRating: (handle) => `/user.rating?handle=${handle}`,
-        contestStanding: "/contest.standings?"
+        contestStanding: "/contest.standings?",
+        userStatus: "/user.status?"
     },
 };

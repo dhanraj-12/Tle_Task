@@ -12,38 +12,29 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.buildCronExpression = void 0;
 const node_cron_1 = __importDefault(require("node-cron"));
+const Questionstat_1 = __importDefault(require("../helpers/Questionstat"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
-const FetchContestdetail_1 = __importDefault(require("../helpers/FetchContestdetail"));
-const buildCronExpression = (hour, minute, frequency) => {
-    if (frequency === "daily")
-        return `${minute} ${hour} * * *`;
-    if (frequency === "weekly")
-        return `${minute} ${hour} * * 0`; // Sunday
-    throw new Error("Invalid frequency");
-};
-exports.buildCronExpression = buildCronExpression;
-const Startsynccontesthandler = () => __awaiter(void 0, void 0, void 0, function* () {
+const Startquestionsynchandler = () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const Allstudents = yield StudentModel_1.default.find();
-        for (const student of Allstudents) {
-            if (student.cfhandle) {
-                yield (0, FetchContestdetail_1.default)(student.id, student.cfhandle);
+        for (const s of Allstudents) {
+            if (s.cfhandle) {
+                yield (0, Questionstat_1.default)(s.cfhandle, s.id);
             }
         }
-        console.log("Contest Sync Completed");
+        console.log("Console sync completed");
     }
     catch (e) {
-        console.log("Error in Syncing Contest", e);
+        console.log("Error in Syncing in Question", e);
     }
 });
 //@ts-ignore
 let currentContestJob = null;
-const Startsynccontest = (schedule) => {
+const Startquestionsync = (schedule) => {
     if (currentContestJob)
         currentContestJob.stop();
-    currentContestJob = node_cron_1.default.schedule(schedule, Startsynccontesthandler);
-    console.log("Scheduled contest sync at:", schedule);
+    const currschedule = schedule ||
+        node_cron_1.default.schedule(schedule, Startquestionsynchandler);
 };
-exports.default = Startsynccontest;
+exports.default = Startquestionsync;

@@ -7,8 +7,8 @@ interface IStudentContest extends Document {
     contestId: number,
     contestName: string,
     rank: number,
-    oldrating: number,
-    newrating: number,
+    oldRating: number,
+    newRating: number,
     ratingUpdateTimeSeconds: number,
     unsolvedCount: number,
 }

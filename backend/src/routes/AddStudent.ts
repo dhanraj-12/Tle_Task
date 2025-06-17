@@ -4,6 +4,7 @@ import StudentModal from "../models/StudentModel";
 import cfhandleinfo from "../helpers/cfhandleinfo";
 import authmiddleware from "../middelware/authmiddleware";
 import SyncStudentcontest from "../helpers/FetchContestdetail";
+import QuestionState from "../helpers/Questionstat";
 
 const Addstudentroute = express.Router();
 
@@ -37,6 +38,10 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
 
             if(newstudent.cfhandle) {
                 await SyncStudentcontest(newstudent.id, newstudent.cfhandle);
+            }
+
+            if(newstudent.cfhandle) {
+                await QuestionState(newstudent.cfhandle,newstudent.id)
             }
 
 
