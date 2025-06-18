@@ -13,6 +13,7 @@ import Startsynccontest, { buildCronExpression } from "./cronjobs/cronsynccontes
 import Startquestionsync from "./cronjobs/cronsyncquestion";
 import setcronschedulerouter from "./routes/SetCronSchedule";
 import heatmapdatarouter from "./routes/Heatmapdata";
+import sendmailrouter from "./routes/testMail";
 
 const app = express();
 app.use(express.json());
@@ -48,6 +49,7 @@ app.use("/api",Exportrouter);
 app.use("/api",SyncContestrouter);
 app.use("/api",setcronschedulerouter);
 app.use("/api",heatmapdatarouter)
+app.use("/api",sendmailrouter);
 
 
 app.listen(3000,()=>console.log("App is listnign on 3000"));

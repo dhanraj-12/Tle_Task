@@ -17,24 +17,23 @@ const mongoose_1 = __importDefault(require("mongoose"));
 const SolvedPrb_1 = __importDefault(require("../models/SolvedPrb"));
 const heatmapdatarouter = express_1.default.Router();
 const heatmapdatahandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const { id } = req.query;
+    const { id, year: yearParam } = req.query;
+    const year = yearParam ? parseInt(yearParam) : new Date().getFullYear();
+    // const { year } = req.query;
     if (!id || typeof id !== "string" || !mongoose_1.default.Types.ObjectId.isValid(id)) {
         res.status(400).json({ error: "Invalid DB id" });
         return;
     }
-    const year = 2024;
+    // const year = 2025;
     try {
         const heatmapData = yield SolvedPrb_1.default.aggregate([
-            // STAGE 1: Filter submissions for the specific student
             {
                 $match: {
                     StudentId: new mongoose_1.default.Types.ObjectId(id)
                 }
             },
-            // STAGE 2: Add computed fields for date processing
             {
                 $addFields: {
-                    // Convert Unix timestamp to date string (YYYY-MM-DD format)
                     dateString: {
                         $dateToString: {
                             format: "%Y-%m-%d",
@@ -45,7 +44,6 @@ const heatmapdatahandler = (req, res) => __awaiter(void 0, void 0, void 0, funct
                             }
                         }
                     },
-                    // Extract year from timestamp for filtering
                     year: {
                         $year: {
                             $toDate: {
@@ -55,20 +53,17 @@ const heatmapdatahandler = (req, res) => __awaiter(void 0, void 0, void 0, funct
                     }
                 }
             },
-            // STAGE 3: Filter submissions by the requested year
             {
                 $match: {
                     year: year
                 }
             },
-            // STAGE 4: Group submissions by date and count them
             {
                 $group: {
                     _id: "$dateString", // Group by date string (YYYY-MM-DD)
                     count: { $sum: 1 } // Count number of submissions per date
                 }
             },
-            // STAGE 5: Format the output structure
             {
                 $project: {
                     _id: 0, // Remove the _id field
@@ -76,7 +71,6 @@ const heatmapdatahandler = (req, res) => __awaiter(void 0, void 0, void 0, funct
                     count: 1 // Keep the count field
                 }
             },
-            // STAGE 6: Sort results by date (ascending order)
             {
                 $sort: { date: 1 }
             }

@@ -6,24 +6,23 @@ import SolvedPrbModel from "../models/SolvedPrb";
 const heatmapdatarouter = express.Router();
 
 const heatmapdatahandler = async (req: Request, res: Response) => {
-  const { id } = req.query;
-  const {year} = req.query;
+  const { id, year: yearParam } = req.query;
+  const year = yearParam ? parseInt(yearParam as string) : new Date().getFullYear();
 
+  // const { year } = req.query;
   if (!id || typeof id !== "string" || !mongoose.Types.ObjectId.isValid(id)) {
     res.status(400).json({ error: "Invalid DB id" });
     return 
 }
-
-
+  // const year = 2025;
   try {
-
-    const pipeline = [
+    const heatmapData = await SolvedPrbModel.aggregate([
       {
         $match: {
           StudentId: new mongoose.Types.ObjectId(id)
         }
       },
-    
+      
       {
         $addFields: {
           dateString: {
@@ -67,11 +66,11 @@ const heatmapdatahandler = async (req: Request, res: Response) => {
         }
       },
       
+      
       {
         $sort: { date: 1 }
       }
-    ]
-    const heatmapData = await SolvedPrbModel.aggregate();
+    ]);
 
     res.json({ data: heatmapData });
   } catch (error) {
