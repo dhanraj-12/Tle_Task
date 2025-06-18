@@ -31,3 +31,5 @@ const InactivityReminder = () => {
     }
   });
 };
+
+export default InactivityReminder;

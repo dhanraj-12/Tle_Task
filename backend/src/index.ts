@@ -14,6 +14,7 @@ import Startquestionsync from "./cronjobs/cronsyncquestion";
 import setcronschedulerouter from "./routes/SetCronSchedule";
 import heatmapdatarouter from "./routes/Heatmapdata";
 import sendmailrouter from "./routes/testMail";
+import InactivityReminder from "./cronjobs/cronsendMail";
 
 const app = express();
 app.use(express.json());
@@ -35,7 +36,7 @@ mongoconnect();
 const defaultCron = buildCronExpression(2, 0, "daily");
 Startsynccontest(defaultCron);
 Startquestionsync(defaultCron);
-
+InactivityReminder();
 
 
 
