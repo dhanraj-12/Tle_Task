@@ -1,37 +1,28 @@
-import { timeStamp } from "console";
-import mongoose from "mongoose";
-import { Schema, Model } from "mongoose";
+import mongoose, { Schema, Document } from "mongoose";
 
 interface ISolvedprb extends Document {
-    StudentId: mongoose.Types.ObjectId,
-    contestId: number,
-    index: string,
-    handle: string,
-    rating: number,
-    name: String,
+  StudentId: mongoose.Types.ObjectId;
+  contestId: number;
+  index: string;
+  handle: string;
+  rating: number;
+  name: string;
+  timestamp: number;
 }
 
+const SolvedPrbSchema: Schema = new Schema({
+  StudentId: {
+    type: mongoose.Types.ObjectId,
+    required: true,
+    ref: "Student"
+  },
+  contestId: { type: Number, required: true },
+  index: { type: String, required: true },
+  handle: { type: String, required: true },
+  rating: { type: Number, required: true },
+  name: { type: String},
+  timestamp: { type: Number, required: true }
+});
 
-const SolvedPrbSchema:Schema  = new Schema({
-    StudentId: {
-        type: mongoose.Types.ObjectId,
-        require: true
-    },
-
-    contestId: {
-        type: Number,
-        require: true 
-    },
-
-    index: String,
-    handle: String,
-    rating: Number,
-    name: String,
-    
-}, {
-    timestamps: true
-})
-
-
-const SolvedPrbModel = mongoose.model<ISolvedprb>("SolvedPrb",SolvedPrbSchema);
+const SolvedPrbModel = mongoose.model<ISolvedprb>("SolvedPrb", SolvedPrbSchema);
 export default SolvedPrbModel;

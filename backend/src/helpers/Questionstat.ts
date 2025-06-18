@@ -1,9 +1,10 @@
+import axios from "axios";
+import mongoose from "mongoose";
 import StudentModel from "../models/StudentModel";
 import SolvedPrbModel from "../models/SolvedPrb";
 import { cfApiConfig } from "../cfapi";
-import axios from "axios";
 
-const QuestionState = async (handle: string, studentId: string) => {
+const QuestionState = async (handle: string, StudentId: string) => {
     try {
         const url = `${cfApiConfig.baseUrl}${cfApiConfig.endpoints.userStatus}`;
         const res = await axios.get(url, {
@@ -15,11 +16,10 @@ const QuestionState = async (handle: string, studentId: string) => {
 
         const submissions = res.data.result;
 
-        // Fetch existing student data
-        const student = await StudentModel.findById(studentId);
+        const student = await StudentModel.findById(StudentId);
         if (!student) throw new Error("Student not found");
 
-        const existingSolved = await SolvedPrbModel.find({ studentId });
+        const existingSolved = await SolvedPrbModel.find({ StudentId });
         const solvedSet = new Set<string>(existingSolved.map(p => `${p.contestId}-${p.index}`));
 
 
@@ -36,7 +36,6 @@ const QuestionState = async (handle: string, studentId: string) => {
             const key = `${s.problem.contestId}-${s.problem.index}`;
             if (solvedSet.has(key)) continue; // already counted
 
-            // Update set and stats
             solvedSet.add(key);
             ratingwise[s.problem.rating] = (ratingwise[s.problem.rating] || 0) + 1;
             totalquestionsolved++;
@@ -51,27 +50,23 @@ const QuestionState = async (handle: string, studentId: string) => {
                 };
             }
 
-            // Store for heatmap or time-based stats
-            const date = new Date(s.creationTimeSeconds * 1000);
             newSolvedProblems.push({
-                studentId,
+                StudentId: new mongoose.Types.ObjectId(StudentId),
                 contestId: s.problem.contestId,
                 index: s.problem.index,
                 rating: s.problem.rating,
-                timestamp: date,
+                timestamp: s.creationTimeSeconds,
                 handle: handle
             });
         }
 
-        // Update student model
-        await StudentModel.findByIdAndUpdate(studentId, {
+        await StudentModel.findByIdAndUpdate(StudentId, {
             totalsolvedprb: totalquestionsolved,
             solvedcountbyrating: ratingwise,
             maxratedsolved : mostdifficult
             
         });
 
-        // Insert new solved problems for heatmap
         if (newSolvedProblems.length > 0) {
             await SolvedPrbModel.insertMany(newSolvedProblems);
         }

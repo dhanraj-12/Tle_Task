@@ -12,11 +12,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const axios_1 = __importDefault(require("axios"));
+const mongoose_1 = __importDefault(require("mongoose"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
 const SolvedPrb_1 = __importDefault(require("../models/SolvedPrb"));
 const cfapi_1 = require("../cfapi");
-const axios_1 = __importDefault(require("axios"));
-const QuestionState = (handle, studentId) => __awaiter(void 0, void 0, void 0, function* () {
+const QuestionState = (handle, StudentId) => __awaiter(void 0, void 0, void 0, function* () {
     var _a, _b;
     try {
         const url = `${cfapi_1.cfApiConfig.baseUrl}${cfapi_1.cfApiConfig.endpoints.userStatus}`;
@@ -27,11 +28,10 @@ const QuestionState = (handle, studentId) => __awaiter(void 0, void 0, void 0, f
             }
         });
         const submissions = res.data.result;
-        // Fetch existing student data
-        const student = yield StudentModel_1.default.findById(studentId);
+        const student = yield StudentModel_1.default.findById(StudentId);
         if (!student)
             throw new Error("Student not found");
-        const existingSolved = yield SolvedPrb_1.default.find({ studentId });
+        const existingSolved = yield SolvedPrb_1.default.find({ StudentId });
         const solvedSet = new Set(existingSolved.map(p => `${p.contestId}-${p.index}`));
         let ratingwise = Object.assign({}, student.solvedcountbyrating);
         let totalquestionsolved = student.totalsolvedprb || 0;
@@ -44,7 +44,6 @@ const QuestionState = (handle, studentId) => __awaiter(void 0, void 0, void 0, f
             const key = `${s.problem.contestId}-${s.problem.index}`;
             if (solvedSet.has(key))
                 continue; // already counted
-            // Update set and stats
             solvedSet.add(key);
             ratingwise[s.problem.rating] = (ratingwise[s.problem.rating] || 0) + 1;
             totalquestionsolved++;
@@ -57,24 +56,20 @@ const QuestionState = (handle, studentId) => __awaiter(void 0, void 0, void 0, f
                     index: s.problem.index
                 };
             }
-            // Store for heatmap or time-based stats
-            const date = new Date(s.creationTimeSeconds * 1000);
             newSolvedProblems.push({
-                studentId,
+                StudentId: new mongoose_1.default.Types.ObjectId(StudentId),
                 contestId: s.problem.contestId,
                 index: s.problem.index,
                 rating: s.problem.rating,
-                timestamp: date,
+                timestamp: s.creationTimeSeconds,
                 handle: handle
             });
         }
-        // Update student model
-        yield StudentModel_1.default.findByIdAndUpdate(studentId, {
+        yield StudentModel_1.default.findByIdAndUpdate(StudentId, {
             totalsolvedprb: totalquestionsolved,
             solvedcountbyrating: ratingwise,
             maxratedsolved: mostdifficult
         });
-        // Insert new solved problems for heatmap
         if (newSolvedProblems.length > 0) {
             yield SolvedPrb_1.default.insertMany(newSolvedProblems);
         }
