@@ -15,29 +15,34 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
 const authmiddleware_1 = __importDefault(require("../middelware/authmiddleware"));
-const FetchContestdetail_1 = __importDefault(require("../helpers/FetchContestdetail"));
-const Editroute = express_1.default.Router();
-const Edithandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userid = req.userId;
-    const update = req.body;
+const checkstudentrouter = express_1.default.Router();
+const checkstudenthandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const id = req.userId;
+    console.log(id);
     try {
-        const updatedstudent = yield StudentModel_1.default.findOneAndUpdate({ userid }, update, { new: true, runValidators: true });
-        if (!updatedstudent) {
-            res.status(404).json({ error: "Student not found" });
+        const student = yield StudentModel_1.default.findOne({ userid: id });
+        console.log(student);
+        if (student) {
+            res.status(200).json({
+                status: true,
+                data: student
+            });
             return;
         }
-        if (update.cfhandle && updatedstudent.cfhandle) {
-            yield (0, FetchContestdetail_1.default)(updatedstudent.id, updatedstudent.cfhandle);
+        else {
+            res.status(404).json({
+                status: false
+            });
+            return;
         }
-        res.status(200).json({
-            message: "Information updated successfully",
-            student: updatedstudent
-        });
     }
     catch (e) {
-        console.error("Error in updating information", e);
-        res.status(500).json({ error: "Internal Server Error" });
+        console.error("Error in checkstudenthandler:", e); // Better error logging
+        res.status(500).json({
+            error: "Internal server error while checking student status"
+        });
+        return;
     }
 });
-Editroute.post("/edit", authmiddleware_1.default, Edithandler);
-exports.default = Editroute;
+checkstudentrouter.get("/check", authmiddleware_1.default, checkstudenthandler);
+exports.default = checkstudentrouter;

@@ -18,7 +18,7 @@ const Edithandler = async (req: Request, res : Response) => {
             return;
         }
 
-        if(updatedstudent.cfhandle) {
+        if(update.cfhandle && updatedstudent.cfhandle) {
             await SyncStudentcontest(updatedstudent.id, updatedstudent.cfhandle);
         }
         
@@ -35,5 +35,5 @@ const Edithandler = async (req: Request, res : Response) => {
 }
 
 
-Editroute.patch("/edit", authmiddleware, Edithandler);
+Editroute.post("/edit", authmiddleware, Edithandler);
 export default Editroute;

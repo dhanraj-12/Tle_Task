@@ -40,3 +40,4 @@ const InactivityReminder = () => {
         }
     }));
 };
+exports.default = InactivityReminder;
