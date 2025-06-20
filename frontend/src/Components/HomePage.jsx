@@ -11,13 +11,13 @@ const HomePage = () => {
     return (
         <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
             <Header
-                setIsSubmitting={setIsSubmitting}
-                setSubmittingStudentId={setSubmittingStudentId}
+                setIsSubmiting={setIsSubmitting}
+                setSubmitindStudentId={setSubmittingStudentId}
             />
             <main className="container mx-auto px-4 py-6">
                 <StudentTable 
-                    isSubmitting={isSubmitting}
-                    submittingStudentId={submittingStudentId}
+                    isSubmiting={isSubmitting}
+                    submitindStudentId={submittingStudentId}
                 />
             </main>
             

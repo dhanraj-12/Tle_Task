@@ -48,6 +48,9 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [loading]);
 
+
+  
+
   return (
     <div className={`container mx-auto px-4 py-8 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <h1 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
@@ -63,6 +66,7 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Email</th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Codeforces Handle</th>
               <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Problems Solved</th>
+              <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider">Profiles</th>
             </tr>
           </thead>
           <tbody className="divide-y divide-gray-200">

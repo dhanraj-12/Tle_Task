@@ -75,6 +75,7 @@ const heatmapdatahandler = (req, res) => __awaiter(void 0, void 0, void 0, funct
                 $sort: { date: 1 }
             }
         ]);
+        console.log("data", heatmapData);
         res.json({ data: heatmapData });
     }
     catch (error) {

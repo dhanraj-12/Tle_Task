@@ -1,6 +1,10 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 
 const StudentRow = ({ student, index, isDarkMode }) => {
+
+  const navigate = useNavigate()
+  
   const getRatingColor = (rating) => {
     if (!rating) return isDarkMode ? 'text-gray-400' : 'text-gray-600'
     if (rating < 1200) return isDarkMode ? 'text-gray-400' : 'text-gray-500'
@@ -53,6 +57,11 @@ const StudentRow = ({ student, index, isDarkMode }) => {
       </td>
       <td className={`px-6 py-4 font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
         {student.totalsolvedprb}
+      </td>
+      <td className={`px-6 py-4 font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
+        onClick={()=>{navigate("/profile")}}
+        >
+          view More
       </td>
     </tr>
   )

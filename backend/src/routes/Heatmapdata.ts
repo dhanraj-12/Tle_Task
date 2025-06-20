@@ -71,7 +71,7 @@ const heatmapdatahandler = async (req: Request, res: Response) => {
         $sort: { date: 1 }
       }
     ]);
-
+    console.log("data",heatmapData);
     res.json({ data: heatmapData });
   } catch (error) {
     console.error("Error fetching heatmap data:", error);
