@@ -1,20 +1,22 @@
 import React from 'react';
 
-const LoadingRow = ({ index }) => {
+const LoadingRow = ({ index, isDarkMode }) => {
   return (
-    <tr className="border-b">
-      <td className="px-4 py-3 text-center">{index + 1}</td>
-      <td className="px-4 py-3">
-        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+    <tr className={`border-b ${isDarkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+      <td className={`px-6 py-4 text-center ${isDarkMode ? 'text-gray-400' : 'text-gray-500'}`}>
+        {index + 1}
       </td>
-      <td className="px-4 py-3">
-        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+      <td className="px-6 py-4">
+        <div className={`h-5 rounded animate-pulse ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
       </td>
-      <td className="px-4 py-3">
-        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+      <td className="px-6 py-4">
+        <div className={`h-5 rounded animate-pulse ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
       </td>
-      <td className="px-4 py-3">
-        <div className="h-4 bg-gray-200 rounded animate-pulse"></div>
+      <td className="px-6 py-4">
+        <div className={`h-5 rounded animate-pulse ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
+      </td>
+      <td className="px-6 py-4">
+        <div className={`h-5 rounded animate-pulse ${isDarkMode ? 'bg-gray-700' : 'bg-gray-200'}`}></div>
       </td>
     </tr>
   );
