@@ -13,7 +13,7 @@ const StudentTable = ({
   setSubmittingStudentId
 }) => {
   const { isDarkMode } = useTheme()
-  const [students, setStudents] = useState([]);
+  const [students, setStudents] = useState([])
   const [isdelting, setIsDeleting] = useState(false)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
@@ -47,7 +47,7 @@ const StudentTable = ({
 
   useEffect(() => {
     fetchStudents()
-  }, [page, fetchStudents,  isdelting])
+  }, [page, fetchStudents, isdelting])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -92,9 +92,11 @@ const StudentTable = ({
     setStudentModal(false)
   }
 
-  const handleDeleteStudent = useCallback((deletedStudentId) => {
-    setStudents(prev => prev.filter(student => student._id !== deletedStudentId));
-  }, []);
+  const handleDeleteStudent = useCallback(deletedStudentId => {
+    setStudents(prev =>
+      prev.filter(student => student._id !== deletedStudentId)
+    )
+  }, [])
 
   return (
     <div
@@ -109,30 +111,32 @@ const StudentTable = ({
       >
         Student Leaderboard
       </h1>
-      <button
-        className={`flex items-center gap-2 px-4 py-2 rounded-md transition hover:cursor-pointer ${
-          isDarkMode
-            ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
-            : 'bg-indigo-500 hover:bg-indigo-600 text-white'
-        }`}
-        onClick={handledownload}
-      >
-        <FiDownload className='w-5 h-5' />
-        <span>Export</span>
-      </button>
-
-      {isAuthenticated && (
+      <div className='flex gap-4 mb-6'>
         <button
           className={`flex items-center gap-2 px-4 py-2 rounded-md transition hover:cursor-pointer ${
             isDarkMode
-              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
-              : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+              ? 'bg-indigo-600 hover:bg-indigo-700 text-white'
+              : 'bg-indigo-500 hover:bg-indigo-600 text-white'
           }`}
-          onClick={handleStudentAction}
+          onClick={handledownload}
         >
-          <span>Add Details</span>
+          <FiDownload className='w-5 h-5' />
+          <span>Export</span>
         </button>
-      )}
+
+        {isAuthenticated && (
+          <button
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition hover:cursor-pointer ${
+              isDarkMode
+                ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+                : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+            }`}
+            onClick={handleStudentAction}
+          >
+            <span>Add Details</span>
+          </button>
+        )}
+      </div>
       <div className='overflow-x-auto rounded-lg shadow'>
         <table
           className={`min-w-full ${
