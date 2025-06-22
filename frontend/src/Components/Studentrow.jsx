@@ -1,10 +1,15 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
+import useStudentStore from '../Context/studentStore'
 
 const StudentRow = ({ student, index, isDarkMode }) => {
 
   const navigate = useNavigate()
-  
+  const handleviewmore = () => {
+    const studentData = JSON.parse(JSON.stringify(student))
+    useStudentStore.getState().setStudent(studentData)
+    navigate('/profile')
+  }
   const getRatingColor = (rating) => {
     if (!rating) return isDarkMode ? 'text-gray-400' : 'text-gray-600'
     if (rating < 1200) return isDarkMode ? 'text-gray-400' : 'text-gray-500'
@@ -59,7 +64,7 @@ const StudentRow = ({ student, index, isDarkMode }) => {
         {student.totalsolvedprb}
       </td>
       <td className={`px-6 py-4 font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
-        onClick={()=>{navigate("/profile")}}
+        onClick={handleviewmore}
         >
           view More
       </td>

@@ -15,28 +15,27 @@ const Profilepage = () => {
   const { isDarkMode } = useTheme()
   const url = 'http://localhost:3000/api'
 
-  const fetchdetails = async () => {
-    try {
-      const res = await axios.get(`${url}/check`, {
-        headers: {
-          authorization: `${localStorage.getItem('token')}`
-        }
-      })
-      if (res.data.status) {
-        const studentData = res.data.data
-        useStudentStore.getState().setStudent(studentData)
-      }
-    } catch (e) {
-      console.error('Error fetching student data:', e)
-    }
-  }
+  // const fetchdetails = async () => {
+  //   try {
+  //     const res = await axios.get(`${url}/check`, {
+  //       headers: {
+  //         authorization: `${localStorage.getItem('token')}`
+  //       }
+  //     })
+  //     if (res.data.status) {
+  //       const studentData = res.data.data
+  //       useStudentStore.getState().setStudent(studentData)
+  //     }
+  //   } catch (e) {
+  //     console.error('Error fetching student data:', e)
+  //   }
+  // }
 
-  useEffect(() => {
-    fetchdetails()
-  }, [])
+  // useEffect(() => {
+  //   fetchdetails()
+  // }, [])
 
-  const student = useStudentStore(state => state.student)
-  const studentData = JSON.parse(JSON.stringify(student))
+  const studentData = useStudentStore(state => state.student)
 
   if (!token) {
     return (<>
