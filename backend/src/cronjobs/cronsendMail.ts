@@ -20,8 +20,8 @@ const InactivityReminder = () => {
       });
 
       for (const student of inactiveStudents) {
-        if(student.cfhandle) {
-            await sendMail(student.email, student.cfhandle);
+        if (student.cfhandle) {
+          await sendMail(student.email, student.cfhandle);
         }
       }
 

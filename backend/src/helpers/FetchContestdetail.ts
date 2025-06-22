@@ -2,6 +2,7 @@ import { cfApiConfig } from "../cfapi";
 import StudentContest from "../models/StudentcontestModel";
 import axios from "axios";
 import getunsolved from "./Unsolvedque";
+import pLimit from "p-limit";
 
 const SyncStudentcontest = async (StudentId: string, handle: string) => {
     try {
@@ -14,44 +15,52 @@ const SyncStudentcontest = async (StudentId: string, handle: string) => {
 
         const contests = data.result;
 
-        // Fetch all contests already stored
+        // Get existing contest entries for this student
         const existing = await StudentContest.find({ StudentId });
         const existingMap = new Map(existing.map(c => [c.contestId, c]));
 
-        const newEntries = [];
-        const updatePromises = [];
+        // Limit concurrent API calls to avoid rate limits
+        const limit = pLimit(5); // max 5 requests at a time
 
-        for (const c of contests) {
-            const existingEntry = existingMap.get(c.contestId);
-            const unsolved = await getunsolved(handle, c.contestId);
+        const contestPromises = contests.map((c: {
+            contestId: number;
+            contestName: string;
+            handle?: string; // Optional since you're already passing the main handle
+            rank: number;
+            ratingUpdateTimeSeconds: number;
+            oldRating: number;
+            newRating: number;
+        }) =>
+            limit(async () => {
+                try {
+                    const existingEntry = existingMap.get(c.contestId);
+                    const unsolved = await getunsolved(handle, c.contestId) || 0; // fallback if error
 
-            if (!existingEntry) {
-                // Not in DB, insert new
-                newEntries.push({
-                    StudentId,
-                    handle,
-                    contestId: c.contestId,
-                    contestName: c.contestName,
-                    rank: c.rank,
-                    oldRating: c.oldRating,
-                    newRating: c.newRating,
-                    ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
-                    unsolvedCount: unsolved
-                });
-            } else {
-               
-                if (
-                    existingEntry.rank !== c.rank ||
-                    existingEntry.oldRating !== c.oldRating ||
-                    existingEntry.newRating !== c.newRating ||
-                    existingEntry.ratingUpdateTimeSeconds !== c.ratingUpdateTimeSeconds ||
-                    existingEntry.unsolvedCount !== unsolved
-                ) {
-                    updatePromises.push(
-                        StudentContest.updateOne(
-                            { _id: existingEntry._id },
-                            {
-                                $set: {
+                    if (!existingEntry) {
+                        return {
+                            insert: {
+                                StudentId,
+                                handle,
+                                contestId: c.contestId,
+                                contestName: c.contestName,
+                                rank: c.rank,
+                                oldRating: c.oldRating,
+                                newRating: c.newRating,
+                                ratingUpdateTimeSeconds: c.ratingUpdateTimeSeconds,
+                                unsolvedCount: unsolved
+                            }
+                        };
+                    } else if (
+                        existingEntry.rank !== c.rank ||
+                        existingEntry.oldRating !== c.oldRating ||
+                        existingEntry.newRating !== c.newRating ||
+                        existingEntry.ratingUpdateTimeSeconds !== c.ratingUpdateTimeSeconds ||
+                        existingEntry.unsolvedCount !== unsolved
+                    ) {
+                        return {
+                            update: {
+                                _id: existingEntry._id,
+                                updateData: {
                                     rank: c.rank,
                                     oldRating: c.oldRating,
                                     newRating: c.newRating,
@@ -59,13 +68,29 @@ const SyncStudentcontest = async (StudentId: string, handle: string) => {
                                     unsolvedCount: unsolved
                                 }
                             }
-                        )
-                    );
-                }
-            }
-        }
+                        };
+                    }
 
-       
+                    return null; // no update needed
+                } catch (e) {
+                    console.error(`Error processing contest ${c.contestId} for ${handle}:`, e);
+                    return null;
+                }
+            })
+        );
+
+        const resolved = await Promise.all(contestPromises);
+
+        // Separate inserts and updates
+        const newEntries = resolved.filter(r => r?.insert).map(r => r.insert);
+        const updatePromises = resolved
+            .filter(r => r?.update)
+            .map(r => StudentContest.updateOne(
+                { _id: r.update._id },
+                { $set: r.update.updateData }
+            ));
+
+        // Perform DB operations
         if (newEntries.length > 0) {
             await StudentContest.insertMany(newEntries);
         }
@@ -74,9 +99,9 @@ const SyncStudentcontest = async (StudentId: string, handle: string) => {
             await Promise.all(updatePromises);
         }
 
-        console.log(`Synced ${newEntries.length} new and ${updatePromises.length} updated contests for ${handle}`);
+        console.log(`✅ Synced ${newEntries.length} new and ${updatePromises.length} updated contests for ${handle}`);
     } catch (e) {
-        console.error(`Error in syncing contest for ${handle}:`, e);
+        console.error(`❌ Error in syncing contests for ${handle}:`, e);
     }
 };
 

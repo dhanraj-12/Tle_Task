@@ -38,13 +38,22 @@ const Profilepage = () => {
   const studentData = useStudentStore(state => state.student)
 
   if (!token) {
-    return (<>
-      <Header/>
-      <div className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-        <h1 className={`text-2xl font-bold ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
-          Please log in to view your profile
-        </h1>
-      </div>
+    return (
+      <>
+        <Header />
+        <div
+          className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
+            isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+          }`}
+        >
+          <h1
+            className={`text-2xl font-bold ${
+              isDarkMode ? 'text-white' : 'text-gray-800'
+            }`}
+          >
+            Please log in to view your profile
+          </h1>
+        </div>
       </>
     )
   }
@@ -72,15 +81,16 @@ const Profilepage = () => {
           {/* Left Column */}
           <div className='space-y-6'>
             {/* Heatmap Card */}
-           
 
             {/* Rating Graph Card */}
             <div
               className={`rounded-xl shadow-md p-6 ${
                 isDarkMode ? 'bg-gray-800' : 'bg-white'
               }`}
-            > <ResponsiveContainer width='100%'>
-              <RatingGraph studentData={studentData} />
+            >
+              {' '}
+              <ResponsiveContainer width='100%'>
+                <RatingGraph studentData={studentData} />
               </ResponsiveContainer>
             </div>
           </div>
@@ -107,26 +117,24 @@ const Profilepage = () => {
               </div>
             </div>
           </div>
-
-          
         </div>
 
         <div
-              className={`rounded-xl shadow-md p-6 ${
-                isDarkMode ? 'bg-gray-800' : 'bg-white'
-              }`}
-            >
-              <h2
-                className={`text-xl font-semibold mb-4 ${
-                  isDarkMode ? 'text-white' : 'text-gray-800'
-                }`}
-              >
-                Submission Heatmap
-              </h2>
-              <div className='overflow-auto'>
-                <Heatmap studentData={studentData} />
-              </div>
-            </div>
+          className={`rounded-xl shadow-md p-6 ${
+            isDarkMode ? 'bg-gray-800' : 'bg-white'
+          }`}
+        >
+          <h2
+            className={`text-xl font-semibold mb-4 ${
+              isDarkMode ? 'text-white' : 'text-gray-800'
+            }`}
+          >
+            Submission Heatmap
+          </h2>
+          <div className='overflow-auto'>
+            <Heatmap studentData={studentData} />
+          </div>
+        </div>
 
         {/* Contest Table Section */}
         <div

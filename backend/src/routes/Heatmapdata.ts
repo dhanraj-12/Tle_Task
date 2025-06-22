@@ -12,8 +12,8 @@ const heatmapdatahandler = async (req: Request, res: Response) => {
   // const { year } = req.query;
   if (!id || typeof id !== "string" || !mongoose.Types.ObjectId.isValid(id)) {
     res.status(400).json({ error: "Invalid DB id" });
-    return 
-}
+    return
+  }
   // const year = 2025;
   try {
     const heatmapData = await SolvedPrbModel.aggregate([
@@ -22,42 +22,42 @@ const heatmapdatahandler = async (req: Request, res: Response) => {
           StudentId: new mongoose.Types.ObjectId(id)
         }
       },
-      
+
       {
         $addFields: {
           dateString: {
             $dateToString: {
               format: "%Y-%m-%d",
-              date: { 
-                $toDate: { 
+              date: {
+                $toDate: {
                   $multiply: ["$timestamp", 1000] // Convert Unix timestamp to milliseconds
-                } 
+                }
               }
             }
           },
           year: {
-            $year: { 
-              $toDate: { 
-                $multiply: ["$timestamp", 1000] 
-              } 
+            $year: {
+              $toDate: {
+                $multiply: ["$timestamp", 1000]
+              }
             }
           }
         }
       },
-      
+
       {
         $match: {
           year: year
         }
       },
-      
+
       {
         $group: {
           _id: "$dateString",        // Group by date string (YYYY-MM-DD)
           count: { $sum: 1 }         // Count number of submissions per date
         }
       },
-      
+
       {
         $project: {
           _id: 0,                    // Remove the _id field
@@ -65,13 +65,13 @@ const heatmapdatahandler = async (req: Request, res: Response) => {
           count: 1                   // Keep the count field
         }
       },
-      
-      
+
+
       {
         $sort: { date: 1 }
       }
     ]);
-    console.log("data",heatmapData);
+    console.log("data", heatmapData);
     res.json({ data: heatmapData });
   } catch (error) {
     console.error("Error fetching heatmap data:", error);

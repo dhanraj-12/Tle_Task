@@ -1,6 +1,7 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import useStudentStore from '../Context/studentStore'
+import useStudentStore from '../Context/studentStore'
 
 const StudentRow = ({ student, index, isDarkMode }) => {
 
@@ -10,6 +11,7 @@ const StudentRow = ({ student, index, isDarkMode }) => {
     useStudentStore.getState().setStudent(studentData)
     navigate('/profile')
   }
+ 
   const getRatingColor = (rating) => {
     if (!rating) return isDarkMode ? 'text-gray-400' : 'text-gray-600'
     if (rating < 1200) return isDarkMode ? 'text-gray-400' : 'text-gray-500'

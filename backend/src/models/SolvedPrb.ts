@@ -20,7 +20,7 @@ const SolvedPrbSchema: Schema = new Schema({
   index: { type: String, required: true },
   handle: { type: String, required: true },
   rating: { type: Number, required: true },
-  name: { type: String},
+  name: { type: String },
   timestamp: { type: Number, required: true }
 });
 

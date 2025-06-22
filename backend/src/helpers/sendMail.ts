@@ -3,12 +3,12 @@ import dotenv from "dotenv"
 dotenv.config();
 
 
-const sendMail = async (to : string, name : string) => {
+const sendMail = async (to: string, name: string) => {
     const transporter = nodemailer.createTransport({
         service: "gmail",
         secure: true,
         host: "smtp.gmail.com",
-        port : 465,
+        port: 465,
         auth: {
             user: process.env.SMTP_USER,
             pass: process.env.SMTP_PASS
@@ -23,7 +23,7 @@ const sendMail = async (to : string, name : string) => {
                <p>We noticed you haven’t submitted any problems on Codeforces in the past 7 days.</p>
                <p>Keep up your streak! 🚀</p>
                <p>— Your CF Tracker Bot 🤖</p>`,
-      });
+    });
 }
 
 export default sendMail;

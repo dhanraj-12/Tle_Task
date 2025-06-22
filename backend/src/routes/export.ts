@@ -8,16 +8,16 @@ const Exportrouter = express.Router();
 const Exportrouterhanler = async (req: Request, res: Response) => {
     try {
         const students = await StudentModal.find().lean();
-        
-        if(!students) {
+
+        if (!students) {
             res.status(404).json({
-                error : "No Student Found",
+                error: "No Student Found",
             })
             return;
         }
 
-        const fields = ["name", "email","phnumber", "cfhandle" ];
-        const json2csv = new Parser({fields});
+        const fields = ["name", "email", "phnumber", "cfhandle"];
+        const json2csv = new Parser({ fields });
         const csv = json2csv.parse(students);
 
         res.header("Content-Type", "text/csv");
@@ -30,5 +30,5 @@ const Exportrouterhanler = async (req: Request, res: Response) => {
     }
 };
 
-Exportrouter.get("/export",Exportrouterhanler);
+Exportrouter.get("/export", Exportrouterhanler);
 export default Exportrouter;

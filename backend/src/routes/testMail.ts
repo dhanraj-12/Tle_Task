@@ -3,12 +3,12 @@ import sendMail from "../helpers/sendMail";
 import { Request, Response } from "express";
 const sendmailrouter = express.Router();
 
-const sendmailhandler = async (req : Request, res:Response) => {
+const sendmailhandler = async (req: Request, res: Response) => {
     const { to, name } = req.body;
 
     if (!to || !name) {
         res.status(400).json({ error: "Missing 'to' or 'name' in request body" });
-        return 
+        return
     }
 
     try {

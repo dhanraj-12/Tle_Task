@@ -1,11 +1,11 @@
-import { create } from 'zustand';
+import { create } from 'zustand'
 
-const useStudentStore = create((set) => ({
-    student: null,
-    setStudent: (data) => {
-      set({ student: data });
-    },
-    clearStudent: () => set({ student: null }),
-}));
+const useStudentStore = create(set => ({
+  student: null,
+  setStudent: data => {
+    set({ student: data })
+  },
+  clearStudent: () => set({ student: null })
+}))
 
-export default useStudentStore;
+export default useStudentStore

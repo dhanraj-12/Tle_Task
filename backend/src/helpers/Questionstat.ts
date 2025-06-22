@@ -63,8 +63,8 @@ const QuestionState = async (handle: string, StudentId: string) => {
         await StudentModel.findByIdAndUpdate(StudentId, {
             totalsolvedprb: totalquestionsolved,
             solvedcountbyrating: ratingwise,
-            maxratedsolved : mostdifficult
-            
+            maxratedsolved: mostdifficult
+
         });
 
         if (newSolvedProblems.length > 0) {

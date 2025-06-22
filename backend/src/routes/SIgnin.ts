@@ -26,23 +26,23 @@ const SigninHandler = async (req: Request, res: Response) => {
       res.status(401).json({ error: "Invalid credentials" });
       return;
     }
-    
+
     // Now safe to access user.password
     const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
-       res.status(401).json({ error: "Invalid credentials" });
+      res.status(401).json({ error: "Invalid credentials" });
     }
 
     const token = jwt.sign(
-      { id: user._id},
+      { id: user._id },
       JWT_SECRET,
-      
+
     );
 
     res.json({ message: "Signin successful", token });
   } catch (error: any) {
     if (error instanceof z.ZodError) {
-       res.status(400).json({ error: error.errors });
+      res.status(400).json({ error: error.errors });
     }
 
     console.error("Signin error:", error);
