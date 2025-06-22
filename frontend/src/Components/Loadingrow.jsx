@@ -49,6 +49,27 @@ const LoadingRow = ({ index, isDarkMode }) => {
           }`}
         ></div>
       </td>
+      <td className='px-6 py-4'>
+        <div
+          className={`h-5 rounded animate-pulse ${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+          }`}
+        ></div>
+      </td>
+      <td className='px-6 py-4'>
+        <div
+          className={`h-5 rounded animate-pulse ${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+          }`}
+        ></div>
+      </td>
+      <td className='px-6 py-4'>
+        <div
+          className={`h-5 rounded animate-pulse ${
+            isDarkMode ? 'bg-gray-700' : 'bg-gray-200'
+          }`}
+        ></div>
+      </td> 
     </tr>
   )
 }

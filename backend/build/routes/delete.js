@@ -14,28 +14,27 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
-const authmiddleware_1 = __importDefault(require("../middelware/authmiddleware"));
+const StudentcontestModel_1 = __importDefault(require("../models/StudentcontestModel"));
+const SolvedPrb_1 = __importDefault(require("../models/SolvedPrb"));
 const deleteroute = express_1.default.Router();
 const delteroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userid = req.userId;
+    const userId = req.body.id;
     try {
-        const deletedStudent = yield StudentModel_1.default.findOneAndDelete({ userid });
+        console.log(userId);
+        const deletedStudent = yield StudentModel_1.default.findByIdAndDelete(userId);
         if (!deletedStudent) {
-            res.status(404).json({
-                error: "User not found",
-            });
+            res.status(404).json({ error: "User not found" });
             return;
         }
-        res.status(200).json({
-            message: "information is delted sucessfully",
-        });
+        console.log(deletedStudent);
+        yield StudentcontestModel_1.default.deleteMany({ StudentId: deletedStudent._id });
+        yield SolvedPrb_1.default.deleteMany({ StudentId: deletedStudent._id });
+        res.status(200).json({ message: "Information deleted successfully" });
     }
-    catch (e) {
-        console.error("Error in deleting the user", e);
-        res.status(400).json({
-            error: "Internal server error",
-        });
+    catch (error) {
+        console.error("Error deleting user data:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
 });
-deleteroute.delete("/delete", authmiddleware_1.default, delteroutehandler);
+deleteroute.delete("/delete", delteroutehandler);
 exports.default = deleteroute;

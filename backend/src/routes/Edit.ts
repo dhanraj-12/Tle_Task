@@ -7,13 +7,12 @@ import SyncStudentcontest from "../helpers/FetchContestdetail";
 const Editroute = express.Router();
 
 const Edithandler = async (req: Request, res: Response) => {
-    const userid = req.userId;
-    const update = req.body;
+    const id = req.body.id;
+    const update = req.body.detail;
 
     try {
-        const exisitingstudent = await StudentModal.findOne({ userid });
-        const updatedstudent = await StudentModal.findOneAndUpdate({ userid }, update, { new: true, runValidators: true });
-
+        const exisitingstudent = await StudentModal.findById(id);
+        const updatedstudent = await StudentModal.findByIdAndUpdate(id, update, { new: true, runValidators: true });
         if (!updatedstudent) {
             res.status(404).json({ error: "Student not found" });
             return;
@@ -36,5 +35,5 @@ const Edithandler = async (req: Request, res: Response) => {
 }
 
 
-Editroute.post("/edit", authmiddleware, Edithandler);
+Editroute.post("/edit", Edithandler);
 export default Editroute;

@@ -1,36 +1,33 @@
-import express from "express";
-import { Request, Response } from "express";
+import express, { Request, Response } from "express";
 import StudentModal from "../models/StudentModel";
-import authmiddleware from "../middelware/authmiddleware";
-
+import StudentContest from "../models/StudentcontestModel";
+import SolvedPrbModel from "../models/SolvedPrb";
 
 const deleteroute = express.Router();
 
 const delteroutehandler = async (req: Request, res: Response) => {
-    const userid = req.userId;
+    const userId = req.body.id; 
 
     try {
-
-        const deletedStudent = await StudentModal.findOneAndDelete({ userid });
+        console.log(userId)
+        const deletedStudent = await StudentModal.findByIdAndDelete(userId);
 
         if (!deletedStudent) {
-            res.status(404).json({
-                error: "User not found",
-            });
-            return;
+            res.status(404).json({ error: "User not found" });
+            return 
         }
+        console.log(deletedStudent)
+        await StudentContest.deleteMany({ StudentId: deletedStudent._id });
 
-        res.status(200).json({
-            message: "information is delted sucessfully",
-        })
+        await SolvedPrbModel.deleteMany({ StudentId: deletedStudent._id });
 
-    } catch (e) {
-        console.error("Error in deleting the user", e);
-        res.status(400).json({
-            error: "Internal server error",
-        })
+        res.status(200).json({ message: "Information deleted successfully" });
+
+    } catch (error) {
+        console.error("Error deleting user data:", error);
+        res.status(500).json({ error: "Internal server error" });
     }
-}
+};
 
-deleteroute.delete("/delete", authmiddleware, delteroutehandler);
+deleteroute.delete("/delete", delteroutehandler);
 export default deleteroute;

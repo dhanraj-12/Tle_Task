@@ -4,14 +4,25 @@ import LoadingRow from './Loadingrow'
 import { useTheme } from '../Context/ThemeContext'
 import { FiDownload } from 'react-icons/fi'
 import axios from 'axios'
+import StudentDetailForm from './Studentdetailform'
 
-const StudentTable = ({ isSubmiting, submitindStudentId }) => {
+const StudentTable = ({
+  isSubmiting,
+  submitindStudentId,
+  setIsSubmitting,
+  setSubmittingStudentId
+}) => {
   const { isDarkMode } = useTheme()
-  const [students, setStudents] = useState([])
+  const [students, setStudents] = useState([]);
+  const [isdelting, setIsDeleting] = useState(false)
   const [page, setPage] = useState(1)
   const [loading, setLoading] = useState(false)
   const [hasMore, setHasMore] = useState(true)
+  const [studentModal, setStudentModal] = useState(false)
   const limit = 10
+  const [isAuthenticated, setIsAuthenticated] = useState(
+    !!localStorage.getItem('token')
+  )
 
   const url = 'http://localhost:3000/api'
 
@@ -36,7 +47,7 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
 
   useEffect(() => {
     fetchStudents()
-  }, [page, fetchStudents])
+  }, [page, fetchStudents,  isdelting])
 
   useEffect(() => {
     const handleScroll = () => {
@@ -74,6 +85,17 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
     }
   }
 
+  const handleStudentAction = () => {
+    setStudentModal(true)
+  }
+  const closeModal = () => {
+    setStudentModal(false)
+  }
+
+  const handleDeleteStudent = useCallback((deletedStudentId) => {
+    setStudents(prev => prev.filter(student => student._id !== deletedStudentId));
+  }, []);
+
   return (
     <div
       className={`container mx-auto px-4 py-8 ${
@@ -98,6 +120,19 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
         <FiDownload className='w-5 h-5' />
         <span>Export</span>
       </button>
+
+      {isAuthenticated && (
+        <button
+          className={`flex items-center gap-2 px-4 py-2 rounded-md transition hover:cursor-pointer ${
+            isDarkMode
+              ? 'bg-emerald-600 hover:bg-emerald-700 text-white'
+              : 'bg-emerald-500 hover:bg-emerald-600 text-white'
+          }`}
+          onClick={handleStudentAction}
+        >
+          <span>Add Details</span>
+        </button>
+      )}
       <div className='overflow-x-auto rounded-lg shadow'>
         <table
           className={`min-w-full ${
@@ -116,6 +151,9 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
                 Email
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider'>
+                Mobile no.
+              </th>
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider'>
                 Codeforces Handle
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider'>
@@ -123,6 +161,12 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
               </th>
               <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider'>
                 Profiles
+              </th>
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider'>
+                Edit
+              </th>
+              <th className='px-6 py-3 text-left text-xs font-medium uppercase tracking-wider'>
+                Delete
               </th>
             </tr>
           </thead>
@@ -140,6 +184,12 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
                   student={student}
                   index={index}
                   isDarkMode={isDarkMode}
+                  isSubmitting={isSubmiting}
+                  submittingStudentId={submitindStudentId}
+                  setIsSubmitting={setIsSubmitting}
+                  setSubmittingStudentId={setSubmittingStudentId}
+                  setIsDeleting={setIsDeleting}
+                  ondelete={handleDeleteStudent}
                 />
               )
             )}
@@ -173,6 +223,15 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
           </div>
         )}
       </div>
+
+      {studentModal && (
+        <StudentDetailForm
+          closeModal={closeModal}
+          isEdit={false}
+          setIsSubmitting={setIsSubmitting}
+          setSubmittingStudentId={setSubmittingStudentId}
+        />
+      )}
     </div>
   )
 }

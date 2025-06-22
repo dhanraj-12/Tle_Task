@@ -65,23 +65,37 @@ const StudentDetailForm = ({
       const url = isEdit
         ? 'http://localhost:3000/api/edit'
         : 'http://localhost:3000/api/add'
-      await axios.post(
-        url,
-        {
+
+      if(isEdit) {
+          await axios.post(url,
+            {
+              detail: {
+                name: formData.name,
+                email: formData.email,
+                cfhandle: formData.cfhandle,
+                phnumber: formData.mobile
+              },
+              id: student._id
+            },)
+      }else {
+        await axios.post(url,{
           name: formData.name,
-          email: formData.email,
-          cfhandle: formData.cfhandle,
-          phnumber: formData.mobile
-        },
-        {
+            email: formData.email,
+            cfhandle: formData.cfhandle,
+            phnumber: formData.mobile
+        }, {
           headers: {
             authorization: `${localStorage.getItem('token')}`
           }
-        }
-      )
+        })
+      }
+      
+     
+      
+
       window.location.reload()
     } catch (e) {
-      alert(e.response?.data?.message || 'Failed to submit details')
+      alert(e.response?.data?.error || 'Failed to submit details')
     } finally {
       setLoading(false)
       setIsSubmitting(false)

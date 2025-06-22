@@ -14,15 +14,14 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
-const authmiddleware_1 = __importDefault(require("../middelware/authmiddleware"));
 const FetchContestdetail_1 = __importDefault(require("../helpers/FetchContestdetail"));
 const Editroute = express_1.default.Router();
 const Edithandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const userid = req.userId;
-    const update = req.body;
+    const id = req.body.id;
+    const update = req.body.detail;
     try {
-        const exisitingstudent = yield StudentModel_1.default.findOne({ userid });
-        const updatedstudent = yield StudentModel_1.default.findOneAndUpdate({ userid }, update, { new: true, runValidators: true });
+        const exisitingstudent = yield StudentModel_1.default.findById(id);
+        const updatedstudent = yield StudentModel_1.default.findByIdAndUpdate(id, update, { new: true, runValidators: true });
         if (!updatedstudent) {
             res.status(404).json({ error: "Student not found" });
             return;
@@ -40,5 +39,5 @@ const Edithandler = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
         res.status(500).json({ error: "Internal Server Error" });
     }
 });
-Editroute.post("/edit", authmiddleware_1.default, Edithandler);
+Editroute.post("/edit", Edithandler);
 exports.default = Editroute;

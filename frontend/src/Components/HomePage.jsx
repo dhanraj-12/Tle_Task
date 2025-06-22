@@ -14,14 +14,13 @@ const HomePage = () => {
         isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
       }`}
     >
-      <Header
-        setIsSubmiting={setIsSubmitting}
-        setSubmitindStudentId={setSubmittingStudentId}
-      />
+      <Header />
       <main className='container mx-auto px-4 py-6'>
         <StudentTable
           isSubmiting={isSubmitting}
           submitindStudentId={submittingStudentId}
+          setIsSubmitting={setIsSubmitting}
+          setSubmittingStudentId={setSubmittingStudentId}
         />
       </main>
 
