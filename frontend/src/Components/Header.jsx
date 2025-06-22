@@ -26,7 +26,6 @@ const Header = () => {
     if (isAuthenticated) {
       localStorage.removeItem('token')
       setIsAuthenticated(false)
-      setHasStudentData(false)
       window.location.reload()
     } else {
       navigate('/auth')

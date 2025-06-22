@@ -48,6 +48,13 @@ const Auth = () => {
             isDarkMode ? 'bg-gray-800' : 'bg-white'
           }`}
         >
+          <h1
+            className={`text-3xl font-bold mb-2 text-center ${
+              isDarkMode ? 'text-white' : 'text-gray-800'
+            }`}
+          >
+            Admin Portal
+          </h1>
           <h2
             className={`text-2xl font-bold mb-6 text-center ${
               isDarkMode ? 'text-white' : 'text-gray-800'

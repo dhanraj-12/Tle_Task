@@ -131,53 +131,23 @@ If applicable, add screenshots or GIFs demonstrating your project:
 
 
 
+![Home page](./public/home.png)
+![Profile1](./public/profil1.png)
+![Profile2](./public/profile2.png)
 
-![Demo Screenshot](path/to/screenshot.png)
 
-## 🤝 Contributing
+## 📽️ Demo Video
 
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Watch the complete walkthrough of Tle_Task here:
 
-### Contribution Guidelines
+[![Watch Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
 
-- Follow the existing code style
-- Add tests for new features
-- Update documentation as needed
-- Ensure all tests pass before submitting
-
-## 📝 Changelog
-
-### [Version 1.0.0] - 2024-XX-XX
-- Initial release
-- Added core functionality
-- Basic documentation
-
-## 🐛 Known Issues
-
-- List any known bugs or limitations
-- Link to GitHub issues if applicable
-
-## 🔮 Future Enhancements
-
-- [ ] Feature 1 to be added
-- [ ] Performance improvements
-- [ ] UI/UX enhancements
-- [ ] Additional test coverage
-
-## 📄 License
-
-This project is licensed under the [License Name] License - see the [LICENSE](LICENSE) file for details.
-
-## 👨‍💻 Author
 
 **Dhanraj**
 - GitHub: [@dhanraj-12](https://github.com/dhanraj-12)
-- Email: [your.email@example.com]
-- LinkedIn: [Your LinkedIn Profile]
+- Email: [dj004786@gmail.com](dj004786@gmail.com)
+- LinkedIn: [Dhanraj Jadhav](https://www.linkedin.com/in/dhanraj-jadhav-473451291/)
+- Codeforces: [dhanraj_12](https://codeforces.com/profile/Dhanraj_12)
 
 ## 🙏 Acknowledgments
 
@@ -198,6 +168,3 @@ If you have any questions or need help, please:
 Give a ⭐️ if this project helped you!
 
 ---
-
-**Note**: This README template should be customized based on your specific project requirements. Remove sections that don't apply and add project-specific information where needed.
-```
