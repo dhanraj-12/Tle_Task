@@ -37,26 +37,26 @@ const Profilepage = () => {
 
   const studentData = useStudentStore(state => state.student)
 
-  if (!token) {
-    return (
-      <>
-        <Header />
-        <div
-          className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
-            isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
-          }`}
-        >
-          <h1
-            className={`text-2xl font-bold ${
-              isDarkMode ? 'text-white' : 'text-gray-800'
-            }`}
-          >
-            Please log in to view your profile
-          </h1>
-        </div>
-      </>
-    )
-  }
+  // if (!token) {
+  //   return (
+  //     <>
+  //       <Header />
+  //       <div
+  //         className={`min-h-screen flex items-center justify-center transition-colors duration-300 ${
+  //           isDarkMode ? 'bg-gray-900' : 'bg-gray-50'
+  //         }`}
+  //       >
+  //         <h1
+  //           className={`text-2xl font-bold ${
+  //             isDarkMode ? 'text-white' : 'text-gray-800'
+  //           }`}
+  //         >
+  //           Please log in to view your profile
+  //         </h1>
+  //       </div>
+  //     </>
+  //   )
+  // }
 
   return (
     <div
