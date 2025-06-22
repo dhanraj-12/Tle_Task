@@ -6,23 +6,23 @@ import { error } from "console";
 dotenv.config();
 
 const JWT_SECRET = process.env.JWT_SECRET;
-const authmiddleware = (req: Request, res : Response, next: NextFunction)=>{
+const authmiddleware = (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization;
-    
-    if(!token) {
+
+    if (!token) {
         res.status(401).json({
-            error : "Token not provide",
+            error: "Token not provide",
         })
     }
-    
-    const decoded = jwt.verify(token as string,JWT_SECRET);
 
-    if(decoded) {
+    const decoded = jwt.verify(token as string, JWT_SECRET);
+
+    if (decoded) {
         req.userId = (decoded as JwtPayload).id;
         next();
-    }else {
+    } else {
         res.status(403).json({
-            message : "You are not logged in"
+            message: "You are not logged in"
         })
     }
 }

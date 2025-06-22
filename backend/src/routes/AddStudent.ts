@@ -8,7 +8,7 @@ import QuestionState from "../helpers/Questionstat";
 
 const Addstudentroute = express.Router();
 
-const Addstudentroutehandler = async (req : Request, res : Response) => {
+const Addstudentroutehandler = async (req: Request, res: Response) => {
     const userid = req.userId;
     const name = req.body.name;
     const email = req.body.email;
@@ -22,11 +22,11 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
     const CurrRating = cfinfo.rating;
     const avatar = cfinfo.avatar;
 
-    if(!cfinfo) {
+    if (!cfinfo) {
         res.status(400).json({
-            message : "Username invalid no user exist"
+            message: "Username invalid no user exist"
         });
-    }else {
+    } else {
         try {
             const newstudent = await StudentModal.create({
                 name,
@@ -39,27 +39,27 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
                 avatar,
             })
 
-            if(newstudent.cfhandle) {
+            if (newstudent.cfhandle) {
                 await SyncStudentcontest(newstudent.id, newstudent.cfhandle);
             }
 
-            if(newstudent.cfhandle) {
-                await QuestionState(newstudent.cfhandle,newstudent.id)
+            if (newstudent.cfhandle) {
+                await QuestionState(newstudent.cfhandle, newstudent.id)
             }
 
 
 
 
             res.status(200).json({
-                message : "Student detailed added succesfully"
+                message: "Student detailed added succesfully"
             })
-        }catch(e) {
+        } catch (e) {
             console.error(e);
         }
-    } 
+    }
 
-    
+
 }
 
-Addstudentroute.post("/add",authmiddleware, Addstudentroutehandler);
+Addstudentroute.post("/add", authmiddleware, Addstudentroutehandler);
 export default Addstudentroute

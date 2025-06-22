@@ -28,10 +28,10 @@ dotenv.config();
 const db_uri = process.env.MONGO_URI;
 const mongoconnect = async () => {
 
-    try{
+    try {
         await mongoose.connect(db_uri)
         console.log('Connected to MongoDB successfully!')
-    }catch(err) {
+    } catch (err) {
         console.error('Error connecting to MongoDB:', err)
     }
 }
@@ -44,17 +44,17 @@ InactivityReminder();
 
 
 
-app.use("/api",Addstudentroute);
-app.use("/api",Siginrouter);
-app.use("/api",Signuprouter);
-app.use("/api",Editroute);
-app.use("/api",deleteroute);
-app.use("/api",Studentlistrouter);
-app.use("/api",Exportrouter);
-app.use("/api",SyncContestrouter);
-app.use("/api",setcronschedulerouter);
-app.use("/api",heatmapdatarouter)
-app.use("/api",sendmailrouter);
-app.use("/api",checkstudentrouter)
+app.use("/api", Addstudentroute);
+app.use("/api", Siginrouter);
+app.use("/api", Signuprouter);
+app.use("/api", Editroute);
+app.use("/api", deleteroute);
+app.use("/api", Studentlistrouter);
+app.use("/api", Exportrouter);
+app.use("/api", SyncContestrouter);
+app.use("/api", setcronschedulerouter);
+app.use("/api", heatmapdatarouter)
+app.use("/api", sendmailrouter);
+app.use("/api", checkstudentrouter)
 
-app.listen(3000,()=>console.log("App is listnign on 3000"));
+app.listen(3000, () => console.log("App is listnign on 3000"));

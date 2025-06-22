@@ -6,7 +6,7 @@ import Startsynccontest from "../cronjobs/cronsynccontes"
 
 const setcronschedulerouter = express.Router();
 
-const setcronschedulehandler = (req: Request, res: Response)=>{
+const setcronschedulehandler = (req: Request, res: Response) => {
     try {
         const { hour, minute, frequency } = req.body;
 
@@ -24,13 +24,13 @@ const setcronschedulehandler = (req: Request, res: Response)=>{
         Startquestionsync(cronString);
 
         res.json({ success: true, cronString });
-        return 
+        return
     } catch (e) {
         console.error("Failed to schedule contest sync", e);
         res.status(500).json({ error: "Internal server error" });
-        return 
+        return
     }
 }
 
-setcronschedulerouter.post("/setcron",setcronschedulehandler);
+setcronschedulerouter.post("/setcron", setcronschedulehandler);
 export default setcronschedulerouter;

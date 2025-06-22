@@ -58,7 +58,7 @@ const StudentRow = ({ student, index, isDarkMode }) => {
       <td className={`px-6 py-4 font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}>
         {student.totalsolvedprb}
       </td>
-      <td className={`px-6 py-4 font-medium ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
+      <td className={`px-6 py-4 font-medium hover:cursor-pointer ${isDarkMode ? 'text-gray-100' : 'text-gray-900'}`}
         onClick={()=>{navigate("/profile")}}
         >
           view More

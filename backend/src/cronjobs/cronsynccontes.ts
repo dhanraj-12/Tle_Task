@@ -1,4 +1,4 @@
-import cron ,{ScheduledTask} from "node-cron";
+import cron, { ScheduledTask } from "node-cron";
 import StudentModal from "../models/StudentModel";
 import SyncStudentcontest from "../helpers/FetchContestdetail";
 
@@ -29,7 +29,7 @@ let currentContestJob: cron.ScheduledTask | null = null;
 const Startsynccontest = (schedule: string) => {
     if (currentContestJob) currentContestJob.stop();
     currentContestJob = cron.schedule(schedule, Startsynccontesthandler);
-    console.log("Scheduled contest sync at:", schedule); 
+    console.log("Scheduled contest sync at:", schedule);
 };
 
 export default Startsynccontest;

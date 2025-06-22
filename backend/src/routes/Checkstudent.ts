@@ -9,14 +9,14 @@ const checkstudenthandler = async (req: Request, res: Response) => {
     const id = req.userId;
     console.log(id);
     try {
-        const student = await StudentModal.findOne({ userid: id}); 
+        const student = await StudentModal.findOne({ userid: id });
         console.log(student);
         if (student) {
-            res.status(200).json({ 
-                status: true, 
-                data: student 
+            res.status(200).json({
+                status: true,
+                data: student
             });
-            return; 
+            return;
         } else {
             res.status(404).json({ // Proper status code for not found
                 status: false
@@ -28,7 +28,7 @@ const checkstudenthandler = async (req: Request, res: Response) => {
         res.status(500).json({ // Proper error status code
             error: "Internal server error while checking student status"
         });
-        return 
+        return
     }
 }
 

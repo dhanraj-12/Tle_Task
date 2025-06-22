@@ -4,7 +4,6 @@ import { useTheme } from "../Context/ThemeContext";
 const ContestRow = ({ contest }) => {
   const { isDarkMode } = useTheme();
 
-  // Determine color for new rating (green if increased, red if decreased)
   const newRatingColor = contest.newRating >= contest.oldRating 
     ? "text-green-500" 
     : "text-red-500";
