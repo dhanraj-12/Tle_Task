@@ -17,8 +17,10 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
     const cfinfo = await cfhandleinfo(cfhandle);
 
 
+
     const MaxRating = cfinfo.maxRating;
     const CurrRating = cfinfo.rating;
+    const avatar = cfinfo.avatar;
 
     if(!cfinfo) {
         res.status(400).json({
@@ -34,6 +36,7 @@ const Addstudentroutehandler = async (req : Request, res : Response) => {
                 MaxRating,
                 CurrRating,
                 userid,
+                avatar,
             })
 
             if(newstudent.cfhandle) {

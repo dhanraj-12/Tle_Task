@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useTheme } from "../Context/ThemeContext";
+import Header from "./Header";
+
 
 const Auth = () => {
   const navigate = useNavigate();
@@ -34,7 +36,8 @@ const Auth = () => {
     }
   };
 
-  return (
+  return (<>
+    <Header/>
     <div className={`min-h-screen flex items-center justify-center ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
       <div className={`w-full max-w-md p-8 rounded-lg shadow-lg transition-colors duration-300 ${isDarkMode ? 'bg-gray-800' : 'bg-white'}`}>
         <h2 className={`text-2xl font-bold mb-6 text-center ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
@@ -110,6 +113,7 @@ const Auth = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

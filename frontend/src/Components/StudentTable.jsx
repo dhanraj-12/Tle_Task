@@ -2,6 +2,8 @@ import React, { useState, useEffect, useCallback } from 'react';
 import StudentRow from './Studentrow';
 import LoadingRow from './Loadingrow';
 import { useTheme } from '../Context/ThemeContext';
+import { FiDownload } from 'react-icons/fi';
+import axios from 'axios';
 
 const StudentTable = ({ isSubmiting, submitindStudentId }) => {
   const { isDarkMode } = useTheme();
@@ -48,7 +50,25 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, [loading]);
 
-
+const handledownload = async() => {
+    try {
+      const res = await axios.get(`${url}/export`, {
+        responseType: 'blob',
+      })
+      
+      const url2 = window.URL.createObjectURL(new Blob([res.data]));
+      const link = document.createElement('a');
+      link.href = url2;
+      link.setAttribute('download', 'student_data.csv');
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      window.URL.revokeObjectURL(url);
+    } catch(e) {
+      console.error('Error downloading data:', e);
+      alert('Failed to download data. Please try again later.');
+    }
+  }
   
 
   return (
@@ -56,7 +76,17 @@ const StudentTable = ({ isSubmiting, submitindStudentId }) => {
       <h1 className={`text-2xl font-bold mb-6 ${isDarkMode ? 'text-white' : 'text-gray-800'}`}>
         Student Leaderboard
       </h1>
-      
+      <button
+                  className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
+                    isDarkMode 
+                      ? 'bg-indigo-600 hover:bg-indigo-700 text-white' 
+                      : 'bg-indigo-500 hover:bg-indigo-600 text-white'
+                  }`}
+                  onClick={handledownload}
+                >
+                  <FiDownload className="w-5 h-5" />
+                  <span>Export</span>
+                </button>
       <div className="overflow-x-auto rounded-lg shadow">
         <table className={`min-w-full ${isDarkMode ? 'bg-gray-800 text-gray-200' : 'bg-white text-gray-800'}`}>
           <thead className={isDarkMode ? 'bg-gray-700' : 'bg-gray-100'}>

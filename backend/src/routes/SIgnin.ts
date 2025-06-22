@@ -36,7 +36,7 @@ const SigninHandler = async (req: Request, res: Response) => {
     const token = jwt.sign(
       { id: user._id},
       JWT_SECRET,
-      { expiresIn: "12h" }
+      
     );
 
     res.json({ message: "Signin successful", token });

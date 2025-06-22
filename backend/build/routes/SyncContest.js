@@ -15,7 +15,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const StudentModel_1 = __importDefault(require("../models/StudentModel"));
 const StudentcontestModel_1 = __importDefault(require("../models/StudentcontestModel"));
-const FetchContestdetail_1 = __importDefault(require("../helpers/FetchContestdetail"));
 const SyncContestrouter = express_1.default.Router();
 const SyncContestrouterhandler = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const { id } = req.params;
@@ -29,7 +28,6 @@ const SyncContestrouterhandler = (req, res) => __awaiter(void 0, void 0, void 0,
             });
             return;
         }
-        yield (0, FetchContestdetail_1.default)(id, student.cfhandle);
         const contest = yield StudentcontestModel_1.default.find({
             StudentId: id,
             ratingUpdateTimeSeconds: { $gte: since },

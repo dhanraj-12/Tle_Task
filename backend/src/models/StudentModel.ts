@@ -28,7 +28,10 @@ const StudentSchema = new Schema({
             name: String
         }
         
-    }
+    },
+
+    avatar : String,
+
 
 },
 {

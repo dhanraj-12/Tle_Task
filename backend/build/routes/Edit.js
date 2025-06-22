@@ -21,12 +21,13 @@ const Edithandler = (req, res) => __awaiter(void 0, void 0, void 0, function* ()
     const userid = req.userId;
     const update = req.body;
     try {
+        const exisitingstudent = yield StudentModel_1.default.findOne({ userid });
         const updatedstudent = yield StudentModel_1.default.findOneAndUpdate({ userid }, update, { new: true, runValidators: true });
         if (!updatedstudent) {
             res.status(404).json({ error: "Student not found" });
             return;
         }
-        if (update.cfhandle && updatedstudent.cfhandle) {
+        if (updatedstudent.cfhandle && ((exisitingstudent === null || exisitingstudent === void 0 ? void 0 : exisitingstudent.cfhandle) !== updatedstudent.cfhandle)) {
             yield (0, FetchContestdetail_1.default)(updatedstudent.id, updatedstudent.cfhandle);
         }
         res.status(200).json({

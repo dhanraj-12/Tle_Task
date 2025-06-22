@@ -59,7 +59,8 @@ const StudentSchema = new mongoose_1.Schema({
             index: String,
             name: String
         }
-    }
+    },
+    avatar: String,
 }, {
     timestamps: true,
 });

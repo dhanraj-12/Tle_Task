@@ -28,6 +28,7 @@ const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, f
     const cfinfo = yield (0, cfhandleinfo_1.default)(cfhandle);
     const MaxRating = cfinfo.maxRating;
     const CurrRating = cfinfo.rating;
+    const avatar = cfinfo.avatar;
     if (!cfinfo) {
         res.status(400).json({
             message: "Username invalid no user exist"
@@ -43,6 +44,7 @@ const Addstudentroutehandler = (req, res) => __awaiter(void 0, void 0, void 0, f
                 MaxRating,
                 CurrRating,
                 userid,
+                avatar,
             });
             if (newstudent.cfhandle) {
                 yield (0, FetchContestdetail_1.default)(newstudent.id, newstudent.cfhandle);

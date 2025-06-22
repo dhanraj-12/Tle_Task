@@ -2,7 +2,6 @@ import express from "express";
 import {Request, Response} from "express"
 import StudentModal from "../models/StudentModel";
 import StudentContest from "../models/StudentcontestModel";
-import SyncStudentcontest from "../helpers/FetchContestdetail";
 
 const SyncContestrouter = express.Router();
 
@@ -21,7 +20,6 @@ const SyncContestrouterhandler = async (req: Request, res: Response) => {
             })
             return;
         }
-        await SyncStudentcontest(id,student.cfhandle as string);
 
         const contest = await StudentContest.find({
             StudentId : id,

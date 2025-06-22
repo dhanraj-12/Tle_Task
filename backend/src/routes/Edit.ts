@@ -11,6 +11,7 @@ const Edithandler = async (req: Request, res : Response) => {
     const update = req.body;
 
     try {
+        const exisitingstudent = await StudentModal.findOne({userid});
         const updatedstudent = await StudentModal.findOneAndUpdate({userid},update,{ new: true, runValidators: true });
         
         if (!updatedstudent) {
@@ -18,7 +19,7 @@ const Edithandler = async (req: Request, res : Response) => {
             return;
         }
 
-        if(update.cfhandle && updatedstudent.cfhandle) {
+        if(updatedstudent.cfhandle && (exisitingstudent?.cfhandle !== updatedstudent.cfhandle)) {
             await SyncStudentcontest(updatedstudent.id, updatedstudent.cfhandle);
         }
         

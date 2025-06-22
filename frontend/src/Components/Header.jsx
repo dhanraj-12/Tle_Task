@@ -59,25 +59,7 @@ const Header = ({ setIsSubmiting, setSubmitindStudentId }) => {
   const handleStudentAction = () => setStudentModal(true)
   const closeModal = () => setStudentModal(false)
 
-  const handledownload = async() => {
-    try {
-      const res = await axios.get(`${url}/export`, {
-        responseType: 'blob',
-      })
-      
-      const url2 = window.URL.createObjectURL(new Blob([res.data]));
-      const link = document.createElement('a');
-      link.href = url2;
-      link.setAttribute('download', 'student_data.csv');
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      window.URL.revokeObjectURL(url);
-    } catch(e) {
-      console.error('Error downloading data:', e);
-      alert('Failed to download data. Please try again later.');
-    }
-  }
+  
 
   return (
     <>
@@ -87,7 +69,7 @@ const Header = ({ setIsSubmiting, setSubmitindStudentId }) => {
           : 'bg-white border-gray-200 text-gray-800'
       } border-b shadow-sm`}>
         
-        <h1 className="text-xl font-bold">Student Portal</h1>
+        <h1 className="text-xl font-bold"> TLE Student Portal</h1>
         
         <div className='flex gap-3 items-center'>
           <button
@@ -100,17 +82,7 @@ const Header = ({ setIsSubmiting, setSubmitindStudentId }) => {
             {isDarkMode ? <FiSun className="w-5 h-5" /> : <FiMoon className="w-5 h-5" />}
           </button>
           
-          <button
-            className={`flex items-center gap-2 px-4 py-2 rounded-md transition ${
-              isDarkMode 
-                ? 'bg-indigo-600 hover:bg-indigo-700 text-white' 
-                : 'bg-indigo-500 hover:bg-indigo-600 text-white'
-            }`}
-            onClick={handledownload}
-          >
-            <FiDownload className="w-5 h-5" />
-            <span>Export</span>
-          </button>
+          
           
           {isAuthenticated && (
             <button
