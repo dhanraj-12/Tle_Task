@@ -131,16 +131,16 @@ If applicable, add screenshots or GIFs demonstrating your project:
 
 
 
-![Home page](./public/home.png)
-![Profile1](./public/profil1.png)
-![Profile2](./public/profile2.png)
+![Home page](./frontend/public/home.png)
+![Profile1](./frontend/public/profil1.png)
+![Profile2](./frontend/public/profile2.png)
 
 
 ## 📽️ Demo Video
 
 Watch the complete walkthrough of Tle_Task here:
 
-[![Watch Demo](https://img.youtube.com/vi/YOUR_VIDEO_ID/maxresdefault.jpg)](https://www.youtube.com/watch?v=YOUR_VIDEO_ID)
+- WalkThrough Video: https://drive.google.com/file/d/1xucQyoB8-ipKL5S-ytNnHEa-UAQI7q1Z/view?usp=drive_link
 
 
 **Dhanraj**
