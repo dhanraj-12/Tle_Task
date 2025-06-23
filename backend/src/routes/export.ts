@@ -16,7 +16,7 @@ const Exportrouterhanler = async (req: Request, res: Response) => {
             return;
         }
 
-        const fields = ["name", "email", "phnumber", "cfhandle"];
+        const fields = ["name", "email", "phnumber", "cfhandle", "MaxRating", "CurrRating"];
         const json2csv = new Parser({ fields });
         const csv = json2csv.parse(students);
 

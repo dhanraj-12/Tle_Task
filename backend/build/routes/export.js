@@ -25,7 +25,7 @@ const Exportrouterhanler = (req, res) => __awaiter(void 0, void 0, void 0, funct
             });
             return;
         }
-        const fields = ["name", "email", "phnumber", "cfhandle"];
+        const fields = ["name", "email", "phnumber", "cfhandle", "MaxRating", "CurrRating"];
         const json2csv = new json2csv_1.Parser({ fields });
         const csv = json2csv.parse(students);
         res.header("Content-Type", "text/csv");
